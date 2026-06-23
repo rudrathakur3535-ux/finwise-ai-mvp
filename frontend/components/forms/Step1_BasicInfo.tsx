@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { User, Calendar, MapPin } from "lucide-react";
 
 interface Step1Props {
-  data: { name: string; age: number; city: string };
-  updateData: (fields: Partial<{ name: string; age: number; city: string }>) => void;
+  data: { name: string; age: number; city?: string };
+  updateData: (fields: Partial<{ name: string; age: number; city?: string }>) => void;
   onNext: () => void;
 }
 
@@ -72,7 +72,7 @@ export function Step1_BasicInfo({ data, updateData, onNext }: Step1Props) {
             </div>
             <input
               type="text"
-              value={data.city}
+              value={data.city || ""}
               onChange={(e) => updateData({ city: e.target.value })}
               className="pl-10 block w-full border-gray-300 rounded-lg border focus:ring-blue-500 focus:border-blue-500 py-3 text-black"
               placeholder="e.g. Mumbai"
