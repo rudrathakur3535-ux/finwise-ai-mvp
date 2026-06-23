@@ -27,7 +27,7 @@ export async function getInvestmentAdvice(data: UserProfileData): Promise<Adviso
   return response.json();
 }
 
-export async function explainFund(fundName: string, data: UserProfileData): Promise<string> {
+export async function explainFund(fundName: string, data: any): Promise<string> {
   const response = await fetch(`${API_BASE_URL}/api/explain-fund`, {
     method: "POST",
     headers: {

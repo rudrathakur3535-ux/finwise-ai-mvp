@@ -86,7 +86,7 @@ export function ProjectionChart({ funds, horizonYears }: Props) {
               tickFormatter={formatCurrency}
             />
             <Tooltip 
-              formatter={(value: number) => formatCurrency(value)}
+              formatter={(value: any) => formatCurrency(Number(value))}
               contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
             />
             <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }} />

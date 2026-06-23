@@ -9,7 +9,7 @@ import { explainFund } from "../../lib/api";
 interface Props {
   fund: RecommendedFund;
   index: number;
-  userProfile: UserProfileData;
+  userProfile: any;
 }
 
 export function FundCard({ fund, index, userProfile }: Props) {
