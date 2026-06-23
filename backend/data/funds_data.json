@@ -1,0 +1,172 @@
+[
+  {
+    "scheme_code": "120503",
+    "name": "Axis Bluechip Fund",
+    "category": "Large Cap Equity",
+    "risk_level": "Moderate",
+    "description": "India ki top 100 companies mein invest karta hai. Stable aur reliable.",
+    "returns": {
+      "1y": 18.5,
+      "3y": 14.2,
+      "5y": 16.3
+    },
+    "expense_ratio": 0.51,
+    "aum_cr": 34521,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "118989",
+    "name": "Mirae Asset Large Cap",
+    "category": "Large Cap Equity",
+    "risk_level": "Moderate",
+    "description": "High quality large companies. Long term wealth creation ke liye.",
+    "returns": {
+      "1y": 22.1,
+      "3y": 16.8,
+      "5y": 18.4
+    },
+    "expense_ratio": 0.54,
+    "aum_cr": 31245,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "100270",
+    "name": "HDFC Mid-Cap Opportunities",
+    "category": "Mid Cap Equity",
+    "risk_level": "Moderate",
+    "description": "Growing mid-size companies. Higher returns, thoda zyada risk.",
+    "returns": {
+      "1y": 31.5,
+      "3y": 22.4,
+      "5y": 24.7
+    },
+    "expense_ratio": 0.76,
+    "aum_cr": 62318,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "122639",
+    "name": "Parag Parikh Flexi Cap",
+    "category": "Hybrid",
+    "risk_level": "Moderate-High",
+    "description": "Flexible — India aur international stocks mix. Well diversified.",
+    "returns": {
+      "1y": 19.8,
+      "3y": 17.9,
+      "5y": 21.2
+    },
+    "expense_ratio": 0.63,
+    "aum_cr": 71234,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "125497",
+    "name": "SBI Small Cap Fund",
+    "category": "Small Cap Equity",
+    "risk_level": "High",
+    "description": "Emerging small companies. High risk, high reward. 7+ year horizon chahiye.",
+    "returns": {
+      "1y": 38.2,
+      "3y": 28.6,
+      "5y": 32.1
+    },
+    "expense_ratio": 0.64,
+    "aum_cr": 24681,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "120587",
+    "name": "ICICI Pru Balanced Advantage",
+    "category": "Hybrid",
+    "risk_level": "Moderate",
+    "description": "Automatically equity aur debt balance karta hai market ke hisaab se.",
+    "returns": {
+      "1y": 14.3,
+      "3y": 12.1,
+      "5y": 13.8
+    },
+    "expense_ratio": 0.43,
+    "aum_cr": 51234,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "119533",
+    "name": "Aditya Birla SL Liquid Fund",
+    "category": "Liquid",
+    "risk_level": "Low",
+    "description": "Very safe. Emergency fund ya short-term parking ke liye.",
+    "returns": {
+      "1y": 7.1,
+      "3y": 5.8,
+      "5y": 6.2
+    },
+    "expense_ratio": 0.18,
+    "aum_cr": 45123,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "118825",
+    "name": "Nippon India Gilt Securities",
+    "category": "Debt",
+    "risk_level": "Low-Moderate",
+    "description": "Government bonds. Capital protection chahne walon ke liye.",
+    "returns": {
+      "1y": 6.8,
+      "3y": 6.1,
+      "5y": 7.3
+    },
+    "expense_ratio": 0.31,
+    "aum_cr": 8923,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "120467",
+    "name": "Kotak Gold Fund",
+    "category": "Gold",
+    "risk_level": "Moderate",
+    "description": "Digital gold. Portfolio hedge ke liye. Inflation se protection.",
+    "returns": {
+      "1y": 12.4,
+      "3y": 9.8,
+      "5y": 11.2
+    },
+    "expense_ratio": 0.14,
+    "aum_cr": 2341,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "135800",
+    "name": "Tata Digital India Fund",
+    "category": "Sectoral Equity",
+    "risk_level": "High",
+    "description": "IT sector focus. High growth potential, high volatility.",
+    "returns": {
+      "1y": 42.3,
+      "3y": 31.2,
+      "5y": 28.9
+    },
+    "expense_ratio": 0.27,
+    "aum_cr": 8912,
+    "min_sip": 500,
+    "min_lumpsum": 5000,
+    "data_source": "AMFI India (amfiindia.com)"
+  }
+]
