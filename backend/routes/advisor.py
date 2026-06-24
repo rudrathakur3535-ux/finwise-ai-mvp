@@ -172,6 +172,27 @@ async def get_tax_saving(monthly_income: float):
         elss_funds = [fund for fund in all_funds if fund.get("category") == "ELSS Tax Saver"]
         top_elss = elss_funds[:3] # Pick top 3
         
+        sip_per_fund = tax_data["recommended_elss_sip"] / 3 if tax_data["recommended_elss_sip"] > 0 else 0
+        
+        # Inject missing fields for FundCard
+        for fund in top_elss:
+            fund["monthly_sip"] = sip_per_fund
+            fund["allocated_percentage"] = round(100 / 3, 1)
+            fund["warning"] = "3-Year Lock-in Period"
+            
+            rate = fund["returns"]["3y"] / 100
+            months = 36 # 3 years
+            if sip_per_fund > 0 and rate > 0:
+                monthly_rate = rate / 12
+                corpus = sip_per_fund * (((1 + monthly_rate)**months - 1) / monthly_rate) * (1 + monthly_rate)
+            else:
+                corpus = sip_per_fund * months
+                
+            fund["projection"] = {
+                "base": corpus,
+                "best": corpus * 1.1,
+                "worst": corpus * 0.9
+            }
         # Inject live NAV for the selected ELSS funds
         for fund in top_elss:
             live_data = await get_live_nav(fund["scheme_code"])

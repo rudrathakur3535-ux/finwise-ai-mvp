@@ -57,11 +57,11 @@ export function FundCard({ fund, index, userProfile }: Props) {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <p className="text-xs text-gray-500 mb-1">Recommended SIP</p>
-            <p className="font-bold text-gray-900">₹{fund.monthly_sip.toLocaleString()}</p>
+            <p className="font-bold text-gray-900">₹{(fund.monthly_sip || 0).toLocaleString()}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 mb-1">Allocation</p>
-            <p className="font-bold text-gray-900">{fund.allocated_percentage}%</p>
+            <p className="font-bold text-gray-900">{fund.allocated_percentage || 0}%</p>
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export function FundCard({ fund, index, userProfile }: Props) {
           <span className="flex items-center">
             <Info className="w-3 h-3 mr-1" /> Exp: {fund.expense_ratio}%
           </span>
-          <span>AUM: ₹{fund.aum_cr.toLocaleString()} Cr</span>
+          <span>AUM: ₹{(fund.aum_cr || 0).toLocaleString()} Cr</span>
         </div>
       </div>
 
