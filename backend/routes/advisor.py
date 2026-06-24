@@ -150,3 +150,50 @@ async def explain_fund_route(req: ExplainRequest):
         return {"explanation": ans}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ----------------------------------------
+# TAX SAVING ENDPOINT — /api/tax-saving
+# ----------------------------------------
+@router.get("/tax-saving")
+async def get_tax_saving(monthly_income: float):
+    try:
+        import json
+        from services.tax_calculator import calculate_tax_savings
+        from services.ai_explainer import generate_tax_advice
+        from services.amfi_fetcher import get_live_nav
+        
+        annual_income = monthly_income * 12
+        tax_data = calculate_tax_savings(annual_income)
+        
+        # Load ELSS funds
+        with open("data/funds_data.json", "r", encoding="utf-8") as f:
+            all_funds = json.load(f)
+            
+        elss_funds = [fund for fund in all_funds if fund.get("category") == "ELSS Tax Saver"]
+        top_elss = elss_funds[:3] # Pick top 3
+        
+        # Inject live NAV for the selected ELSS funds
+        for fund in top_elss:
+            live_data = await get_live_nav(fund["scheme_code"])
+            if live_data:
+                fund["live_nav"] = live_data["nav"]
+                fund["nav_date"] = live_data["date"]
+            else:
+                fund["live_nav"] = None
+                fund["nav_date"] = None
+                
+        # Generate Gemini advice
+        ai_advice = generate_tax_advice(
+            monthly_income=monthly_income,
+            tax_saved=tax_data["tax_saved"],
+            recommended_sip=tax_data["recommended_elss_sip"]
+        )
+        
+        return {
+            "status": "success",
+            "tax_data": tax_data,
+            "recommended_funds": top_elss,
+            "ai_advice": ai_advice
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Tax Saving Error: {str(e)}")

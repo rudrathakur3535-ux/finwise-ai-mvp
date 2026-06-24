@@ -10,6 +10,7 @@ import { FundCard } from "../../components/dashboard/FundCard";
 import { ProjectionChart } from "../../components/dashboard/ProjectionChart";
 import { AIAdviceCard } from "../../components/dashboard/AIAdviceCard";
 import { WhatIfSimulator } from "../../components/dashboard/WhatIfSimulator";
+import { TaxSavingSection } from "../../components/dashboard/TaxSavingSection";
 import { ArrowLeft, Download, AlertTriangle } from "lucide-react";
 
 export default function ResultsPage() {
@@ -101,6 +102,14 @@ export default function ResultsPage() {
             horizonYears={user_profile.horizon_years} 
           />
         </div>
+
+        {/* Tax Saving Section */}
+        {user_profile.monthly_income * 12 > 500000 && (
+          <TaxSavingSection 
+            monthlyIncome={user_profile.monthly_income} 
+            userProfile={user_profile} 
+          />
+        )}
 
         {/* Dynamic Risk Warning */}
         <div className={`border rounded-2xl p-5 flex items-start space-x-3 mt-10 ${

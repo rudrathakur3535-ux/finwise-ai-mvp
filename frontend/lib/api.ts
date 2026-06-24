@@ -52,3 +52,20 @@ export async function explainFund(fundName: string, data: any): Promise<string> 
   const result = await response.json();
   return result.explanation;
 }
+
+
+export async function getTaxSavingAdvice(monthlyIncome: number) {
+  const response = await fetch(`${API_BASE_URL}/api/tax-saving?monthly_income=${monthlyIncome}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to get tax saving advice");
+  }
+
+  return response.json();
+}
+

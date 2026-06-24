@@ -73,3 +73,17 @@ export interface AdvisorResponse {
   recommended_funds: RecommendedFund[];
   ai_advice: string;
 }
+
+export interface TaxSavingData {
+  eligible_80c_amount: number;
+  recommended_elss_sip: number;
+  tax_saved: number;
+  tax_bracket: string;
+}
+
+export interface TaxSavingResponse {
+  status: string;
+  tax_data: TaxSavingData;
+  recommended_funds: RecommendedFund[];
+  ai_advice: string;
+}

@@ -168,5 +168,90 @@
     "min_sip": 500,
     "min_lumpsum": 5000,
     "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "133925",
+    "name": "Mirae Asset Tax Saver Fund",
+    "category": "ELSS Tax Saver",
+    "risk_level": "High",
+    "description": "Tax saving under 80C. High quality large & midcap stocks focus.",
+    "returns": {
+      "1y": 25.4,
+      "3y": 18.2,
+      "5y": 20.1
+    },
+    "expense_ratio": 0.58,
+    "aum_cr": 22450,
+    "min_sip": 500,
+    "min_lumpsum": 500,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "112323",
+    "name": "Axis Long Term Equity Fund",
+    "category": "ELSS Tax Saver",
+    "risk_level": "Moderate-High",
+    "description": "Tax saving under 80C. Stable growth with quality stocks.",
+    "returns": {
+      "1y": 22.1,
+      "3y": 15.6,
+      "5y": 16.8
+    },
+    "expense_ratio": 0.72,
+    "aum_cr": 32100,
+    "min_sip": 500,
+    "min_lumpsum": 500,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "112090",
+    "name": "Quant Tax Plan",
+    "category": "ELSS Tax Saver",
+    "risk_level": "Very High",
+    "description": "Tax saving under 80C. Aggressive quantitative model driven returns.",
+    "returns": {
+      "1y": 48.5,
+      "3y": 35.2,
+      "5y": 38.4
+    },
+    "expense_ratio": 0.77,
+    "aum_cr": 8500,
+    "min_sip": 500,
+    "min_lumpsum": 500,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "112108",
+    "name": "Canara Robeco Equity Tax Saver",
+    "category": "ELSS Tax Saver",
+    "risk_level": "High",
+    "description": "Tax saving under 80C. Consistent performer with balanced approach.",
+    "returns": {
+      "1y": 24.8,
+      "3y": 17.5,
+      "5y": 18.9
+    },
+    "expense_ratio": 0.61,
+    "aum_cr": 7800,
+    "min_sip": 500,
+    "min_lumpsum": 500,
+    "data_source": "AMFI India (amfiindia.com)"
+  },
+  {
+    "scheme_code": "104629",
+    "name": "DSP Tax Saver Fund",
+    "category": "ELSS Tax Saver",
+    "risk_level": "High",
+    "description": "Tax saving under 80C. Diversified portfolio for long-term compounding.",
+    "returns": {
+      "1y": 26.3,
+      "3y": 19.1,
+      "5y": 17.8
+    },
+    "expense_ratio": 0.69,
+    "aum_cr": 13200,
+    "min_sip": 500,
+    "min_lumpsum": 500,
+    "data_source": "AMFI India (amfiindia.com)"
   }
 ]
