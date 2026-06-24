@@ -39,6 +39,8 @@ export interface RecommendedFund {
   data_source: string;
   projection: FundProjection;
   warning: string | null;
+  live_nav?: number | null;
+  nav_date?: string | null;
 }
 
 export interface PortfolioAllocation {

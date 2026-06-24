@@ -65,13 +65,26 @@ export function FundCard({ fund, index, userProfile }: Props) {
           </div>
         </div>
 
-        <div className="bg-green-50 rounded-lg p-3 flex items-center justify-between">
+        <div className="bg-green-50 rounded-lg p-3 flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <TrendingUp className="w-4 h-4 text-green-600" />
             <span className="text-sm font-medium text-green-800">5Y Return</span>
           </div>
           <span className="font-bold text-green-700">{fund.returns["5y"]}% p.a.</span>
         </div>
+
+        {fund.live_nav ? (
+          <div className="bg-blue-50 rounded-lg p-3 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+              <span className="text-sm font-medium text-blue-800">Live NAV</span>
+            </div>
+            <div className="text-right">
+              <span className="font-bold text-blue-700">₹{fund.live_nav.toFixed(4)}</span>
+              {fund.nav_date && <p className="text-[10px] text-blue-500 mt-0.5">As of {fund.nav_date}</p>}
+            </div>
+          </div>
+        ) : null}
 
         <div className="mt-4 flex justify-between text-xs text-gray-500">
           <span className="flex items-center">

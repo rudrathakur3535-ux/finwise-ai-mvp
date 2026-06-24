@@ -69,6 +69,17 @@ async def get_financial_advice(profile: UserProfile):
             monthly_savings = profile.monthly_savings,
             horizon_years   = profile.horizon_years
         )
+        
+        # ----- STEP 3.5: Fetch Live NAV from AMFI -----
+        from services.amfi_fetcher import get_live_nav
+        for fund in selected_funds:
+            live_data = await get_live_nav(fund["scheme_code"])
+            if live_data:
+                fund["live_nav"] = live_data["nav"]
+                fund["nav_date"] = live_data["date"]
+            else:
+                fund["live_nav"] = None
+                fund["nav_date"] = None
 
         # ----- STEP 4: AI Advice (Gemini) -----
         ai_advice = generate_advice(
