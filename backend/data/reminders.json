@@ -1,0 +1,44 @@
+{
+    "reminders": [
+        {
+            "user_name": "",
+            "email": "rudrathakur3535@gmail.com",
+            "sip_date": 1,
+            "funds": [
+                {
+                    "fund_name": "Mirae Asset Large Cap",
+                    "monthly_sip": 84000
+                },
+                {
+                    "fund_name": "HDFC Mid-Cap Opportunities",
+                    "monthly_sip": 60000
+                },
+                {
+                    "fund_name": "Parag Parikh Flexi Cap",
+                    "monthly_sip": 24000
+                },
+                {
+                    "fund_name": "SBI Small Cap Fund",
+                    "monthly_sip": 24000
+                },
+                {
+                    "fund_name": "Nippon India Gilt Securities",
+                    "monthly_sip": 12000
+                },
+                {
+                    "fund_name": "Aditya Birla SL Liquid Fund",
+                    "monthly_sip": 12000
+                },
+                {
+                    "fund_name": "Kotak Gold Fund",
+                    "monthly_sip": 12000
+                },
+                {
+                    "fund_name": "Tata Digital India Fund",
+                    "monthly_sip": 12000
+                }
+            ],
+            "created_at": "2026-06-24T20:28:09.549995"
+        }
+    ]
+}

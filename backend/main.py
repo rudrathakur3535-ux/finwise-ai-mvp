@@ -10,11 +10,29 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Apna advisor router import karo
 from routes.advisor import router as advisor_router
+from routers.reminders import router as reminders_router
+from routers.portfolio import router as portfolio_router
+from services.reminder_service import check_and_send_reminders
+from apscheduler.schedulers.background import BackgroundScheduler
+from contextlib import asynccontextmanager
+
+scheduler = BackgroundScheduler()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Start scheduler
+    scheduler.add_job(check_and_send_reminders, 'cron', hour=9, minute=0)
+    scheduler.start()
+    print("APScheduler started: Daily SIP reminders scheduled for 9:00 AM.")
+    yield
+    # Shutdown
+    scheduler.shutdown()
 
 app = FastAPI(
     title="FinWise AI API",
     description="🧠 AI-Powered Financial Investment Advisor",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS — Frontend (Next.js) aur Vercel se requests allow karo
@@ -25,8 +43,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Advisor router attach karo
+# Routers attach karo
 app.include_router(advisor_router)
+app.include_router(reminders_router, prefix="/api/reminders", tags=["Reminders"])
+app.include_router(portfolio_router, prefix="/api/portfolio", tags=["Portfolio"])
 
 
 @app.get("/health")

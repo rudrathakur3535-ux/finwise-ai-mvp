@@ -11,7 +11,8 @@ import { ProjectionChart } from "../../components/dashboard/ProjectionChart";
 import { AIAdviceCard } from "../../components/dashboard/AIAdviceCard";
 import { WhatIfSimulator } from "../../components/dashboard/WhatIfSimulator";
 import { TaxSavingSection } from "../../components/dashboard/TaxSavingSection";
-import { ArrowLeft, Download, AlertTriangle } from "lucide-react";
+import { SIPReminderCard } from "../../components/dashboard/SIPReminderCard";
+import { ArrowLeft, Download, AlertTriangle, TrendingUp } from "lucide-react";
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -28,48 +29,63 @@ export default function ResultsPage() {
   }, [router]);
 
   if (!data) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="animate-spin w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full shadow-[0_0_15px_rgba(0,208,156,0.5)]"></div>
     </div>
   );
 
   const { user_profile, risk_assessment, portfolio, recommended_funds, ai_advice } = data;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F8FAFC] py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 space-y-4 md:space-y-0">
           <div>
             <button 
               onClick={() => router.push("/")}
-              className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 mb-2 transition-colors"
+              className="flex items-center text-sm font-medium text-[#64748B] hover:text-[#0F172A] mb-3 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4 mr-1" /> Start Over
+              <ArrowLeft className="w-4 h-4 mr-1.5" /> Start Over
             </button>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[#0F172A] tracking-tight">
               Your Investment Plan
             </h1>
-            <p className="text-gray-500 mt-1">Custom built for your {risk_assessment.category.toLowerCase()} profile.</p>
+            <p className="text-[#64748B] mt-2 text-lg">Custom built for your <span className="font-semibold text-[#10B981]">{risk_assessment.category.toLowerCase()}</span> profile.</p>
           </div>
-          <button 
-            className="flex items-center justify-center space-x-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-semibold py-2 px-6 rounded-xl shadow-sm transition-colors"
-            onClick={() => window.print()}
-          >
-            <Download className="w-4 h-4" />
-            <span>Download PDF</span>
-          </button>
+          <div className="flex space-x-3">
+            <button 
+              className="flex items-center justify-center space-x-2 bg-white border border-[#E2E8F0] text-[#0F172A] hover:bg-gray-50 hover:border-[#10B981]/50 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all"
+              onClick={() => window.print()}
+            >
+              <Download className="w-4 h-4" />
+              <span>PDF</span>
+            </button>
+            <button 
+              className="flex items-center justify-center space-x-2 bg-[#10B981] hover:bg-[#059669] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all"
+              onClick={() => {
+                localStorage.setItem("finwise_draft_portfolio", JSON.stringify({
+                  funds: recommended_funds,
+                  risk_score: risk_assessment.score
+                }));
+                router.push("/portfolio");
+              }}
+            >
+              <TrendingUp className="w-4 h-4" />
+              <span>Track Portfolio</span>
+            </button>
+          </div>
         </div>
 
         {/* Top Section: Risk Profile & AI Advice */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <RiskProfileCard risk={risk_assessment} />
           <AIAdviceCard advice={ai_advice} />
         </div>
 
         {/* Middle Section: Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
           <div className="lg:col-span-1">
             <AllocationChart allocation={portfolio.allocation} />
           </div>
@@ -79,10 +95,10 @@ export default function ResultsPage() {
         </div>
 
         {/* Bottom Section: Recommended Funds */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">Recommended Portfolio</h2>
-            <div className="bg-blue-100 text-blue-800 px-4 py-1.5 rounded-full text-sm font-bold">
+        <div className="mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-[#0F172A] mb-4 sm:mb-0">Recommended Portfolio</h2>
+            <div className="bg-emerald-50 text-[#10B981] border border-emerald-100 px-5 py-2 rounded-xl text-sm font-bold shadow-sm w-max">
               Total SIP: ₹{portfolio.total_sip.toLocaleString()}/mo
             </div>
           </div>
@@ -103,6 +119,13 @@ export default function ResultsPage() {
           />
         </div>
 
+        {/* SIP Reminder System */}
+        <SIPReminderCard 
+          userName={user_profile.name} 
+          totalSip={portfolio.total_sip} 
+          funds={recommended_funds.map(f => ({ fund_name: f.name, monthly_sip: f.monthly_sip }))}
+        />
+
         {/* Tax Saving Section */}
         {user_profile.monthly_income * 12 > 500000 && (
           <TaxSavingSection 
@@ -112,27 +135,27 @@ export default function ResultsPage() {
         )}
 
         {/* Dynamic Risk Warning */}
-        <div className={`border rounded-2xl p-5 flex items-start space-x-3 mt-10 ${
+        <div className={`border rounded-2xl p-6 flex items-start space-x-4 mt-12 ${
           risk_assessment.category.toLowerCase() === "aggressive" 
-            ? "bg-red-50 border-red-200" 
+            ? "bg-rose-50 border-rose-200" 
             : risk_assessment.category.toLowerCase() === "conservative"
             ? "bg-blue-50 border-blue-200"
             : "bg-amber-50 border-amber-200"
         }`}>
-          <AlertTriangle className={`w-6 h-6 flex-shrink-0 ${
+          <AlertTriangle className={`w-7 h-7 flex-shrink-0 mt-0.5 ${
             risk_assessment.category.toLowerCase() === "aggressive" 
-              ? "text-red-500" 
+              ? "text-rose-500" 
               : risk_assessment.category.toLowerCase() === "conservative"
               ? "text-blue-500"
               : "text-amber-500"
           }`} />
-          <div className="text-sm leading-relaxed">
-            <p className={`font-bold mb-1 ${
+          <div className="text-sm leading-relaxed text-[#64748B]">
+            <p className={`font-bold mb-1.5 text-base ${
               risk_assessment.category.toLowerCase() === "aggressive" 
-              ? "text-red-800" 
+              ? "text-rose-700" 
               : risk_assessment.category.toLowerCase() === "conservative"
-              ? "text-blue-800"
-              : "text-amber-800"
+              ? "text-blue-700"
+              : "text-amber-700"
             }`}>
               {risk_assessment.category.toLowerCase() === "aggressive" 
                 ? "High Risk Warning" 
@@ -140,13 +163,7 @@ export default function ResultsPage() {
                 ? "Low Risk Notice"
                 : "Moderate Risk Advisory"}
             </p>
-            <p className={
-              risk_assessment.category.toLowerCase() === "aggressive" 
-              ? "text-red-700" 
-              : risk_assessment.category.toLowerCase() === "conservative"
-              ? "text-blue-700"
-              : "text-amber-700"
-            }>
+            <p className="text-[#0F172A]">
               <strong>Mutual Fund investments are subject to market risks.</strong> 
               {" "}Please read all scheme related documents carefully before investing. 
               The projections shown above are based on historical performance and do not guarantee future returns.

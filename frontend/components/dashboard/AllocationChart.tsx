@@ -18,23 +18,22 @@ export function AllocationChart({ allocation }: Props) {
     }))
     .sort((a, b) => b.value - a.value);
 
-  // Modern financial color palette
+  // Modern premium financial color palette
   const COLORS = [
-    '#2563eb', // blue-600
-    '#3b82f6', // blue-500
-    '#60a5fa', // blue-400
-    '#10b981', // emerald-500
-    '#34d399', // emerald-400
-    '#f59e0b', // amber-500
-    '#8b5cf6', // violet-500
+    '#10B981', // emerald (primary)
+    '#059669', // darker emerald
+    '#3B82F6', // blue
+    '#8B5CF6', // purple
+    '#F59E0B', // amber
+    '#34D399', // light emerald
   ];
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-100">
-          <p className="font-semibold text-gray-900">{payload[0].name}</p>
-          <p className="text-blue-600 font-bold">{payload[0].value}% Allocation</p>
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-[#E2E8F0]">
+          <p className="font-semibold text-[#0F172A]">{payload[0].name}</p>
+          <p className="text-[#10B981] font-bold">{payload[0].value}% Allocation</p>
         </div>
       );
     }
@@ -46,9 +45,9 @@ export function AllocationChart({ allocation }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100"
+      className="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E2E8F0] h-full"
     >
-      <h3 className="text-xl font-bold text-gray-900 mb-6">Portfolio Allocation</h3>
+      <h3 className="text-xl font-bold text-[#0F172A] mb-6">Portfolio Allocation</h3>
       
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
@@ -57,33 +56,34 @@ export function AllocationChart({ allocation }: Props) {
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={65}
+              outerRadius={85}
               paddingAngle={5}
               dataKey="value"
+              stroke="none"
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend verticalAlign="bottom" height={36} iconType="circle" />
+            <Tooltip content={<CustomTooltip />} cursor={{fill: 'transparent'}} />
+            <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: '#0F172A', fontSize: '12px' }} />
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-6 flex justify-around border-t border-gray-100 pt-4">
+      <div className="mt-6 flex justify-around border-t border-[#E2E8F0] pt-5">
         <div className="text-center">
-          <p className="text-sm text-gray-500">Equity</p>
-          <p className="font-bold text-lg text-gray-900">{allocation.equity_percent}%</p>
+          <p className="text-sm text-[#64748B] mb-1">Equity</p>
+          <p className="font-bold text-lg text-[#0F172A]">{allocation.equity_percent}%</p>
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-500">Debt/Safe</p>
-          <p className="font-bold text-lg text-gray-900">{allocation.safe_percent}%</p>
+          <p className="text-sm text-[#64748B] mb-1">Debt/Safe</p>
+          <p className="font-bold text-lg text-[#0F172A]">{allocation.safe_percent}%</p>
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-500">Gold</p>
-          <p className="font-bold text-lg text-gray-900">{allocation.gold_percent}%</p>
+          <p className="text-sm text-[#64748B] mb-1">Gold</p>
+          <p className="font-bold text-lg text-[#0F172A]">{allocation.gold_percent}%</p>
         </div>
       </div>
     </motion.div>

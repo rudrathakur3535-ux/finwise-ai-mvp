@@ -61,39 +61,39 @@ export function ProjectionChart({ funds, horizonYears }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100"
+      className="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E2E8F0] h-full"
     >
       <div className="flex justify-between items-end mb-6">
         <div>
-          <h3 className="text-xl font-bold text-gray-900">Wealth Projection</h3>
-          <p className="text-sm text-gray-500">Expected growth over {horizonYears} years</p>
+          <h3 className="text-xl font-bold text-[#0F172A]">Wealth Projection</h3>
+          <p className="text-sm text-[#64748B]">Expected growth over {horizonYears} years</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-gray-500">Expected Corpus</p>
-          <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalBase)}</p>
+          <p className="text-sm text-[#64748B]">Expected Corpus</p>
+          <p className="text-2xl font-bold text-[#0F172A]">{formatCurrency(totalBase)}</p>
         </div>
       </div>
 
       <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} />
             <YAxis 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#6b7280', fontSize: 12 }}
+              tick={{ fill: '#64748B', fontSize: 12 }}
               tickFormatter={formatCurrency}
             />
             <Tooltip 
               formatter={(value: any) => formatCurrency(Number(value))}
-              contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+              contentStyle={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', color: '#0F172A' }}
             />
-            <Legend iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
-            <Line type="monotone" dataKey="Optimistic" stroke="#10b981" strokeWidth={2} dot={false} strokeDasharray="5 5" />
-            <Line type="monotone" dataKey="Expected" stroke="#2563eb" strokeWidth={3} dot={true} activeDot={{ r: 6 }} />
-            <Line type="monotone" dataKey="Pessimistic" stroke="#f59e0b" strokeWidth={2} dot={false} strokeDasharray="5 5" />
-            <Line type="monotone" dataKey="Invested" stroke="#9ca3af" strokeWidth={2} dot={false} />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', color: '#0F172A' }} />
+            <Line type="monotone" dataKey="Optimistic" stroke="#10B981" strokeWidth={2} dot={false} strokeDasharray="5 5" />
+            <Line type="monotone" dataKey="Expected" stroke="#3B82F6" strokeWidth={3} dot={true} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="Pessimistic" stroke="#F59E0B" strokeWidth={2} dot={false} strokeDasharray="5 5" />
+            <Line type="monotone" dataKey="Invested" stroke="#94A3B8" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>

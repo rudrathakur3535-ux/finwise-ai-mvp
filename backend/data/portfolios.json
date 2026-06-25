@@ -1,0 +1,211 @@
+{
+    "portfolios": [
+        {
+            "user_name": "",
+            "email": "rudrathakur3535@gmail.com",
+            "funds": [
+                {
+                    "scheme_code": "118989",
+                    "fund_name": "Mirae Asset Large Cap",
+                    "monthly_sip": 8400,
+                    "start_date": "2026-06-25",
+                    "total_invested": 8400.0
+                },
+                {
+                    "scheme_code": "100270",
+                    "fund_name": "HDFC Mid-Cap Opportunities",
+                    "monthly_sip": 6000,
+                    "start_date": "2026-06-25",
+                    "total_invested": 6000.0
+                },
+                {
+                    "scheme_code": "122639",
+                    "fund_name": "Parag Parikh Flexi Cap",
+                    "monthly_sip": 2400,
+                    "start_date": "2026-06-25",
+                    "total_invested": 2400.0
+                },
+                {
+                    "scheme_code": "125497",
+                    "fund_name": "SBI Small Cap Fund",
+                    "monthly_sip": 2400,
+                    "start_date": "2026-06-25",
+                    "total_invested": 2400.0
+                },
+                {
+                    "scheme_code": "118825",
+                    "fund_name": "Nippon India Gilt Securities",
+                    "monthly_sip": 1200,
+                    "start_date": "2026-06-25",
+                    "total_invested": 1200.0
+                },
+                {
+                    "scheme_code": "119533",
+                    "fund_name": "Aditya Birla SL Liquid Fund",
+                    "monthly_sip": 1200,
+                    "start_date": "2026-06-25",
+                    "total_invested": 1200.0
+                },
+                {
+                    "scheme_code": "120467",
+                    "fund_name": "Kotak Gold Fund",
+                    "monthly_sip": 1200,
+                    "start_date": "2026-06-25",
+                    "total_invested": 1200.0
+                },
+                {
+                    "scheme_code": "135800",
+                    "fund_name": "Tata Digital India Fund",
+                    "monthly_sip": 1200,
+                    "start_date": "2026-06-25",
+                    "total_invested": 1200.0
+                }
+            ],
+            "risk_score": 7.8,
+            "created_at": "2026-06-24T21:39:15.792979",
+            "last_updated": "2026-06-25T09:25:03.758856",
+            "summary": {
+                "total_invested": 24000.0,
+                "current_value": 28235.27,
+                "total_gain": 4235.27,
+                "gain_percentage": 17.65,
+                "best_fund": {
+                    "scheme_code": "118989",
+                    "fund_name": "Mirae Asset Large Cap",
+                    "monthly_sip": 8400,
+                    "total_invested": 8400.0,
+                    "start_date": "2026-06-25",
+                    "units": 43.3631,
+                    "current_nav": 227.898,
+                    "current_value": 9882.35,
+                    "gain_amount": 1482.35,
+                    "gain_percentage": 17.65,
+                    "annualized_return": 603.03
+                },
+                "worst_fund": {
+                    "scheme_code": "118989",
+                    "fund_name": "Mirae Asset Large Cap",
+                    "monthly_sip": 8400,
+                    "total_invested": 8400.0,
+                    "start_date": "2026-06-25",
+                    "units": 43.3631,
+                    "current_nav": 227.898,
+                    "current_value": 9882.35,
+                    "gain_amount": 1482.35,
+                    "gain_percentage": 17.65,
+                    "annualized_return": 603.03
+                },
+                "funds_performance": [
+                    {
+                        "scheme_code": "118989",
+                        "fund_name": "Mirae Asset Large Cap",
+                        "monthly_sip": 8400,
+                        "total_invested": 8400.0,
+                        "start_date": "2026-06-25",
+                        "units": 43.3631,
+                        "current_nav": 227.898,
+                        "current_value": 9882.35,
+                        "gain_amount": 1482.35,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "100270",
+                        "fund_name": "HDFC Mid-Cap Opportunities",
+                        "monthly_sip": 6000,
+                        "total_invested": 6000.0,
+                        "start_date": "2026-06-25",
+                        "units": 70.5882,
+                        "current_nav": 100.0,
+                        "current_value": 7058.82,
+                        "gain_amount": 1058.82,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "122639",
+                        "fund_name": "Parag Parikh Flexi Cap",
+                        "monthly_sip": 2400,
+                        "total_invested": 2400.0,
+                        "start_date": "2026-06-25",
+                        "units": 31.3959,
+                        "current_nav": 89.933,
+                        "current_value": 2823.53,
+                        "gain_amount": 423.53,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "125497",
+                        "fund_name": "SBI Small Cap Fund",
+                        "monthly_sip": 2400,
+                        "total_invested": 2400.0,
+                        "start_date": "2026-06-25",
+                        "units": 13.7689,
+                        "current_nav": 205.0655,
+                        "current_value": 2823.53,
+                        "gain_amount": 423.53,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "118825",
+                        "fund_name": "Nippon India Gilt Securities",
+                        "monthly_sip": 1200,
+                        "total_invested": 1200.0,
+                        "start_date": "2026-06-25",
+                        "units": 11.1689,
+                        "current_nav": 126.401,
+                        "current_value": 1411.76,
+                        "gain_amount": 211.76,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "119533",
+                        "fund_name": "Aditya Birla SL Liquid Fund",
+                        "monthly_sip": 1200,
+                        "total_invested": 1200.0,
+                        "start_date": "2026-06-25",
+                        "units": 11.6824,
+                        "current_nav": 120.8453,
+                        "current_value": 1411.76,
+                        "gain_amount": 211.76,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "120467",
+                        "fund_name": "Kotak Gold Fund",
+                        "monthly_sip": 1200,
+                        "total_invested": 1200.0,
+                        "start_date": "2026-06-25",
+                        "units": 44.3951,
+                        "current_nav": 31.8,
+                        "current_value": 1411.76,
+                        "gain_amount": 211.76,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    },
+                    {
+                        "scheme_code": "135800",
+                        "fund_name": "Tata Digital India Fund",
+                        "monthly_sip": 1200,
+                        "total_invested": 1200.0,
+                        "start_date": "2026-06-25",
+                        "units": 31.0529,
+                        "current_nav": 45.4632,
+                        "current_value": 1411.76,
+                        "gain_amount": 211.76,
+                        "gain_percentage": 17.65,
+                        "annualized_return": 603.03
+                    }
+                ],
+                "health_score": 10.0,
+                "rebalancing_needed": false,
+                "rebalancing_suggestions": [],
+                "ai_insight": "Namaste! Aapke portfolio ki performance kaafi impressive hai! 17.65% ka total gain aur 10/10 ka Health Score bata raha hai ki aapne bohot smart choices ki hain, especially Mirae Asset Large Cap fund ke saath. Apni investment journey mein aise hi aage badhte rahiye, aap bilkul sahi track par hain!"
+            }
+        }
+    ]
+}

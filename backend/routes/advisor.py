@@ -29,6 +29,7 @@ class UserProfile(BaseModel):
     User ka financial profile.
     Frontend se yeh JSON aayega POST request mein.
     """
+    name:            str   = Field(default="",            description="User ka naam")
     age:             int   = Field(..., ge=18, le=80,     description="User ki age (18-80)")
     monthly_income:  float = Field(..., gt=0,             description="Monthly income in ₹")
     monthly_savings: float = Field(..., ge=0,             description="Monthly savings in ₹")

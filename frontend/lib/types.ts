@@ -8,6 +8,7 @@ export interface UserProfileData {
   horizon_years: number;
   existing_amount: number;
   city?: string;
+  language?: string;
 }
 
 export interface FundProjection {
