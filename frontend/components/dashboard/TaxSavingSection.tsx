@@ -42,9 +42,29 @@ export function TaxSavingSection({ monthlyIncome, userProfile }: Props) {
     );
   }
 
-  if (error || !data || data.tax_data.tax_saved === 0) {
-    // Return null if no tax saved or error
+  if (error || !data) {
     return null;
+  }
+
+  if (data.tax_data.tax_saved === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="mt-12 bg-white rounded-3xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E2E8F0] text-center"
+      >
+        <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-full inline-block mb-4 text-[#10B981]">
+          <Sparkles className="w-8 h-8" />
+        </div>
+        <h2 className="text-2xl font-bold text-[#0F172A] mb-3">No Tax Liability! 🎉</h2>
+        <p className="text-[#64748B] max-w-2xl mx-auto mb-6 leading-relaxed">
+          Based on your income, you currently fall in the <span className="font-bold text-[#10B981]">0% tax bracket</span>. 
+          You don't need to invest in ELSS mutual funds just for saving taxes right now. 
+          Focus on building wealth through normal equity mutual funds which don't have a strict 3-year lock-in!
+        </p>
+      </motion.div>
+    );
   }
 
   return (
