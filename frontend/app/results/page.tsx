@@ -121,7 +121,7 @@ export default function ResultsPage() {
 
         {/* SIP Reminder System */}
         <SIPReminderCard 
-          userName={user_profile.name} 
+          userName={(user_profile as any).name || "User"} 
           totalSip={portfolio.total_sip} 
           funds={recommended_funds.map(f => ({ fund_name: f.name, monthly_sip: f.monthly_sip }))}
         />

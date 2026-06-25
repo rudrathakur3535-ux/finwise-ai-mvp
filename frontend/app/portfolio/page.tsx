@@ -300,7 +300,7 @@ export default function PortfolioPage() {
                   <Tooltip 
                     contentStyle={{ backgroundColor: "#ffffff", borderColor: "#E2E8F0", borderRadius: "12px", color: "#0F172A", boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                     itemStyle={{ color: "#0F172A", fontWeight: 'bold' }}
-                    formatter={(value: number) => [`₹${value.toLocaleString()}`, undefined]}
+                    formatter={(value: any) => [`₹${Number(value).toLocaleString()}`, undefined]}
                   />
                   <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: '500', color: '#0F172A' }} />
                   <Area type="monotone" dataKey="Invested" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorInvested)" />

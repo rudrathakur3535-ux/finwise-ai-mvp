@@ -36,7 +36,6 @@ export default function TaxSavingPage() {
           <PageHeader 
             title="Tax Saving Planner"
             subtitle="Maximize your take-home salary with ELSS mutual funds under Section 80C."
-            icon={<Calculator className="w-8 h-8" />}
           />
         </div>
 
