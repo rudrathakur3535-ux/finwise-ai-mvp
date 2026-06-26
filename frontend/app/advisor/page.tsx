@@ -58,22 +58,60 @@ export default function AdvisorPage() {
     } catch (err: any) {
       console.warn("Backend unavailable, using mock data for demo.");
       const mockResult = {
-        risk_profile: formData.risk_appetite,
-        time_horizon: formData.horizon_years,
-        monthly_sip: formData.monthly_savings,
-        expected_return_rate: formData.risk_appetite === "aggressive" ? 15 : formData.risk_appetite === "moderate" ? 12 : 8,
-        expected_corpus: formData.monthly_savings * 12 * formData.horizon_years * 1.8, 
-        allocation_percentages: [
-          { category: "Large Cap", percentage: 40 },
-          { category: "Mid Cap", percentage: 30 },
-          { category: "Small Cap", percentage: 20 },
-          { category: "Debt", percentage: 10 },
-        ],
-        ai_explanation: "Based on your inputs, we have selected a balanced approach to maximize growth while managing volatility. This allocation is perfectly suited for your time horizon.",
+        status: "success",
+        user_profile: {
+          age: formData.age,
+          monthly_income: formData.monthly_income,
+          monthly_savings: formData.monthly_savings,
+          risk_appetite: formData.risk_appetite,
+          horizon_years: formData.horizon_years,
+        },
+        risk_assessment: {
+          score: formData.risk_appetite === "aggressive" ? 9 : formData.risk_appetite === "moderate" ? 7 : 4,
+          max_score: 10,
+          category: formData.risk_appetite === "aggressive" ? "High Risk" : formData.risk_appetite === "moderate" ? "Moderate-Aggressive" : "Conservative",
+          emoji: "🚀",
+          tagline: formData.risk_appetite === "aggressive" ? "Maximum Growth" : formData.risk_appetite === "moderate" ? "High Growth" : "Capital Protection",
+          color: "amber",
+          description: "Growth-focused investor",
+          breakdown: {}
+        },
+        portfolio: {
+          allocation: {
+            equity_percent: 85,
+            safe_percent: 10,
+            gold_percent: 5,
+            detail: { "Large Cap": 40, "Mid Cap": 30, "Small Cap": 15, "Debt": 10, "Gold": 5 }
+          },
+          total_sip: formData.monthly_savings,
+          total_corpus: formData.monthly_savings * 12 * formData.horizon_years * 1.8
+        },
+        ai_advice: "Based on your inputs, we have selected a balanced approach to maximize growth while managing volatility. This allocation is perfectly suited for your time horizon.",
         recommended_funds: [
-          { name: "Parag Parikh Flexi Cap Fund", category: "Flexi Cap", rating: 5, sip_amount: formData.monthly_savings * 0.4, historical_return_3yr: 22.5, ai_reason: "Excellent downside protection and global exposure." },
-          { name: "Quant Small Cap Fund", category: "Small Cap", rating: 5, sip_amount: formData.monthly_savings * 0.3, historical_return_3yr: 35.2, ai_reason: "High alpha generation for long-term growth." },
-          { name: "Axis Bluechip Fund", category: "Large Cap", rating: 4, sip_amount: formData.monthly_savings * 0.3, historical_return_3yr: 15.4, ai_reason: "Stability during market downturns with consistent returns." }
+          { 
+            name: "Parag Parikh Flexi Cap Fund", 
+            category: "Flexi Cap", 
+            rating: 5, 
+            monthly_sip: formData.monthly_savings * 0.4, 
+            returns: { "3y": 22.5 }, 
+            description: "Excellent downside protection and global exposure." 
+          },
+          { 
+            name: "Quant Small Cap Fund", 
+            category: "Small Cap", 
+            rating: 5, 
+            monthly_sip: formData.monthly_savings * 0.3, 
+            returns: { "3y": 35.2 }, 
+            description: "High alpha generation for long-term growth." 
+          },
+          { 
+            name: "Axis Bluechip Fund", 
+            category: "Large Cap", 
+            rating: 4, 
+            monthly_sip: formData.monthly_savings * 0.3, 
+            returns: { "3y": 15.4 }, 
+            description: "Stability during market downturns with consistent returns." 
+          }
         ]
       };
       localStorage.setItem("finwise_result", JSON.stringify(mockResult));

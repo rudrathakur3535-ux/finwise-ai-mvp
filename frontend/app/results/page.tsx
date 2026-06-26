@@ -13,6 +13,7 @@ import { PageWrapper } from "../../components/ui/premium/PageWrapper";
 import { GradientButton } from "../../components/ui/premium/GradientButton";
 import { GlowBadge } from "../../components/ui/premium/GlowBadge";
 import { TaxSavingSection } from "../../components/dashboard/TaxSavingSection";
+import { AdvisorResponse, RecommendedFund } from "../../lib/types";
 
 // Typewriter Effect Component
 const TypewriterText = ({ text }: { text: string }) => {
@@ -33,7 +34,7 @@ const TypewriterText = ({ text }: { text: string }) => {
 
 export default function ResultsPage() {
   const router = useRouter();
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AdvisorResponse | null>(null);
   const [expandedFund, setExpandedFund] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [extraSip, setExtraSip] = useState(0);
@@ -50,46 +51,49 @@ export default function ResultsPage() {
     }
   }, [router]);
 
-  if (!result) return (
+  if (!result || !result.portfolio) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-16">
       <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 
-  const riskProfileName = result.risk_profile === "aggressive" ? "High Risk" 
-    : result.risk_profile === "moderate" ? "Moderate-Aggressive" 
-    : "Conservative";
-  
-  const riskScore = result.risk_profile === "aggressive" ? 9.2 
-    : result.risk_profile === "moderate" ? 7.8 
-    : 4.5;
-  
-  const strategyFocus = result.risk_profile === "aggressive" ? "Maximum Growth" 
-    : result.risk_profile === "moderate" ? "High Growth" 
-    : "Capital Protection";
+  const riskProfileName = result.risk_assessment?.category || "Moderate-Aggressive";
+  const riskScore = result.risk_assessment?.score || 7.5;
+  const strategyFocus = result.risk_assessment?.tagline || "High Growth";
 
-  const totalInvestment = result.monthly_sip * 12 * result.time_horizon;
-  const wealthGained = result.expected_corpus - totalInvestment;
+  const monthlySip = result.portfolio.total_sip;
+  const timeHorizon = result.user_profile.horizon_years;
+  const expectedCorpus = result.portfolio.total_corpus;
 
-  const pieColors = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+  const totalInvestment = monthlySip * 12 * timeHorizon;
+
+  const pieColors = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#F43F5E'];
   
-  // What-If Simulator Calculation
-  const baseMonthlyRate = (result.expected_return_rate / 100) / 12;
-  const totalMonths = result.time_horizon * 12;
+  // Transform allocation detail object to array
+  const allocationPercentages = Object.entries(result.portfolio.allocation.detail).map(([category, percentage]) => ({
+    category,
+    percentage
+  }));
+
+  // Expected return rate approximation based on risk profile for the What-If Simulator
+  const riskAppetite = result.user_profile.risk_appetite;
+  const expectedReturnRate = riskAppetite === "aggressive" ? 15 : riskAppetite === "moderate" ? 12 : 8;
+  const baseMonthlyRate = (expectedReturnRate / 100) / 12;
+  const totalMonths = timeHorizon * 12;
   
   // Future Value of SIP formula: P × ({[1 + i]^n - 1} / i) × (1 + i)
   const calculateCorpus = (monthlyAmount: number) => {
+    if (baseMonthlyRate === 0) return monthlyAmount * totalMonths;
     return Math.round(monthlyAmount * ((Math.pow(1 + baseMonthlyRate, totalMonths) - 1) / baseMonthlyRate) * (1 + baseMonthlyRate));
   };
   
-  const simulatedCorpus = calculateCorpus(result.monthly_sip + extraSip);
-  const diffCorpus = simulatedCorpus - result.expected_corpus;
+  const simulatedCorpus = calculateCorpus(monthlySip + extraSip);
 
   const chartData = [];
-  for(let i=0; i<=result.time_horizon; i++) {
-    const yearInvestment = result.monthly_sip * 12 * i;
+  for(let i=0; i<=timeHorizon; i++) {
+    const yearInvestment = monthlySip * 12 * i;
     // rough approximation for area chart curve
-    const yearCorpus = i === 0 ? 0 : calculateCorpus(result.monthly_sip) * Math.pow(i/result.time_horizon, 1.5);
+    const yearCorpus = i === 0 ? 0 : calculateCorpus(monthlySip) * Math.pow(i/timeHorizon, 1.5);
     chartData.push({
       year: i,
       Expected: Math.round(yearCorpus),
@@ -119,7 +123,7 @@ export default function ResultsPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">Your Investment Plan</h1>
-              <p className="text-gray-500 mt-2 text-lg">Custom built for your <span className="font-bold text-emerald-500">{result.risk_profile}</span> profile.</p>
+              <p className="text-gray-500 mt-2 text-lg">Custom built for your <span className="font-bold text-emerald-500 capitalize">{result.user_profile.risk_appetite}</span> profile.</p>
             </div>
             <div className="flex gap-4">
               <button className="px-6 py-3 bg-white border border-gray-200 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm flex items-center">
@@ -146,10 +150,10 @@ export default function ResultsPage() {
             <div>
               <p className="text-xs font-bold text-gray-500 tracking-wider uppercase mb-3">Your Risk Profile</p>
               <div className="flex items-center gap-4 mb-2">
-                <div className="w-12 h-12 bg-pink-50 rounded-full flex items-center justify-center text-2xl">🚀</div>
+                <div className="w-12 h-12 bg-pink-50 rounded-full flex items-center justify-center text-2xl">{result.risk_assessment?.emoji || "🚀"}</div>
                 <h2 className="text-3xl font-extrabold text-gray-900">{riskProfileName}</h2>
               </div>
-              <p className="text-gray-600 font-medium ml-16">Growth-Focused Investor</p>
+              <p className="text-gray-600 font-medium ml-16">{result.risk_assessment?.description || "Growth-Focused Investor"}</p>
             </div>
             <div className="bg-amber-50 border border-amber-200/50 rounded-2xl p-4 flex flex-col items-center justify-center min-w-[120px]">
               <span className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">Score</span>
@@ -169,7 +173,7 @@ export default function ResultsPage() {
               <Activity className="w-6 h-6 text-amber-500" />
               <div>
                 <p className="text-xs text-gray-500 font-medium mb-0.5">Volatility Tolerance</p>
-                <p className="font-bold text-gray-900">High</p>
+                <p className="font-bold text-gray-900">{riskAppetite === "aggressive" ? "Very High" : riskAppetite === "moderate" ? "High" : "Low"}</p>
               </div>
             </div>
           </div>
@@ -179,7 +183,7 @@ export default function ResultsPage() {
               <Bot className="w-5 h-5 text-purple-600" />
               <h3 className="font-bold text-gray-900">FinWise AI Insight <Sparkles className="w-4 h-4 inline text-amber-400" /></h3>
             </div>
-            <TypewriterText text={result.ai_explanation || `Aapka risk score ${riskScore}/10 hai. Aapke liye best funds select kiye gaye hain with total monthly SIP of ₹${result.monthly_sip.toLocaleString()}. Consistent SIP se long term mein achhe returns milenge. Invest karte raho!`} />
+            <TypewriterText text={result.ai_advice || `Aapka risk score ${riskScore}/10 hai. Aapke liye best funds select kiye gaye hain with total monthly SIP of ₹${monthlySip.toLocaleString()}. Consistent SIP se long term mein achhe returns milenge. Invest karte raho!`} />
           </div>
         </motion.div>
 
@@ -195,12 +199,12 @@ export default function ResultsPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={result.allocation_percentages}
+                    data={allocationPercentages}
                     cx="50%" cy="50%" innerRadius={70} outerRadius={100}
                     paddingAngle={3} dataKey="percentage" stroke="none"
                     cornerRadius={5}
                   >
-                    {result.allocation_percentages.map((entry: any, index: number) => (
+                    {allocationPercentages.map((entry: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                     ))}
                   </Pie>
@@ -214,13 +218,13 @@ export default function ResultsPage() {
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-gray-400 text-xs font-bold uppercase">Equity</span>
                 <span className="text-2xl font-black text-gray-900">
-                  {result.allocation_percentages.reduce((acc: number, curr: any) => curr.category.includes('Cap') ? acc + curr.percentage : acc, 0)}%
+                  {result.portfolio.allocation.equity_percent}%
                 </span>
               </div>
             </div>
             
             <div className="mt-auto grid grid-cols-2 gap-x-4 gap-y-3">
-              {result.allocation_percentages.map((alloc: any, i: number) => (
+              {allocationPercentages.map((alloc: any, i: number) => (
                 <div key={i} className="flex items-center text-sm font-medium">
                   <div className="w-3 h-3 rounded-full mr-2 flex-shrink-0" style={{ backgroundColor: pieColors[i % pieColors.length] }}></div>
                   <span className="text-gray-600 truncate mr-auto">{alloc.category}</span>
@@ -238,11 +242,11 @@ export default function ResultsPage() {
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h3 className="text-xl font-bold text-gray-900">Wealth Projection</h3>
-                <p className="text-sm text-gray-500 mt-1">Expected growth over {result.time_horizon} years</p>
+                <p className="text-sm text-gray-500 mt-1">Expected growth over {timeHorizon} years</p>
               </div>
               <div className="text-right">
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Expected Corpus</p>
-                <p className="text-3xl font-black text-emerald-600">₹{(result.expected_corpus/10000000).toFixed(2)}Cr</p>
+                <p className="text-3xl font-black text-emerald-600">₹{(expectedCorpus/10000000).toFixed(2)}Cr</p>
               </div>
             </div>
             <div className="h-[280px] w-full">
@@ -281,13 +285,19 @@ export default function ResultsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <h2 className="text-3xl font-bold text-gray-900">Recommended Portfolio</h2>
             <div className="bg-emerald-50 text-emerald-700 px-5 py-2.5 rounded-full text-sm font-bold border border-emerald-100 flex items-center self-start sm:self-auto">
-              Total SIP: ₹{result.monthly_sip.toLocaleString()}/mo
+              Total SIP: ₹{monthlySip.toLocaleString()}/mo
             </div>
           </div>
 
           <div className="space-y-6">
             {result.recommended_funds.map((fund: any, idx: number) => {
               const isExpanded = expandedFund === fund.name;
+              
+              // Handle differences between mock and real API response gracefully
+              const sipAmount = fund.monthly_sip || fund.sip_amount || 0;
+              const return3y = fund.returns?.["3y"] || fund.historical_return_3yr || 0;
+              const reason = fund.description || fund.ai_reason || "Great choice for long term.";
+              
               return (
                 <div key={idx} className="bg-white border border-gray-200 rounded-3xl overflow-hidden hover:shadow-md transition-shadow">
                   <div className="p-6 md:p-8">
@@ -299,20 +309,20 @@ export default function ResultsPage() {
                     </div>
                     
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{fund.name}</h3>
-                    <p className="text-gray-600 mb-8">{fund.ai_reason}</p>
+                    <p className="text-gray-600 mb-8">{reason}</p>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-end pb-8 border-b border-gray-100">
                       <div>
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Recommended SIP</p>
-                        <p className="text-xl font-bold text-gray-900">₹{fund.sip_amount.toLocaleString()}</p>
+                        <p className="text-xl font-bold text-gray-900">₹{sipAmount.toLocaleString()}</p>
                       </div>
                       <div>
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Allocation</p>
-                        <p className="text-xl font-bold text-gray-900">{Math.round((fund.sip_amount/result.monthly_sip)*100)}%</p>
+                        <p className="text-xl font-bold text-gray-900">{Math.round((sipAmount/monthlySip)*100)}%</p>
                       </div>
                       <div className="md:col-span-2 bg-emerald-50 rounded-xl p-4 flex justify-between items-center border border-emerald-100">
                         <span className="text-sm font-bold text-emerald-800 flex items-center"><TrendingUp className="w-4 h-4 mr-2" /> 3Y Return</span>
-                        <span className="text-xl font-black text-emerald-600">{fund.historical_return_3yr}% p.a.</span>
+                        <span className="text-xl font-black text-emerald-600">{return3y}% p.a.</span>
                       </div>
                     </div>
 
@@ -333,7 +343,7 @@ export default function ResultsPage() {
                       >
                         <p className="text-gray-700 font-medium leading-relaxed flex items-start">
                           <Bot className="w-5 h-5 text-purple-600 mr-3 flex-shrink-0 mt-0.5" />
-                          {fund.ai_reason}
+                          {reason}
                         </p>
                       </motion.div>
                     )}
@@ -369,12 +379,12 @@ export default function ResultsPage() {
             </div>
 
             <div className="border-t border-gray-100 pt-6 mt-6">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">New Expected Corpus in {result.time_horizon} Years</p>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">New Expected Corpus in {timeHorizon} Years</p>
               <h4 className="text-4xl font-black text-gray-900">₹{simulatedCorpus.toLocaleString()}</h4>
               
               <div className="mt-4 flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
                 <span className="text-sm text-gray-600 font-medium">New Total SIP</span>
-                <span className="font-bold text-gray-900">₹{(result.monthly_sip + extraSip).toLocaleString()} /mo</span>
+                <span className="font-bold text-gray-900">₹{(monthlySip + extraSip).toLocaleString()} /mo</span>
               </div>
             </div>
           </motion.div>
@@ -385,7 +395,7 @@ export default function ResultsPage() {
               <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center"><Bell className="w-5 h-5 text-blue-600" /></div>
               <h3 className="text-xl font-bold text-gray-900">Set SIP Reminder</h3>
             </div>
-            <p className="text-gray-500 mb-6 relative z-10">Consistency is key. Set an email reminder so you never miss your ₹{result.monthly_sip.toLocaleString()} SIP.</p>
+            <p className="text-gray-500 mb-6 relative z-10">Consistency is key. Set an email reminder so you never miss your ₹{monthlySip.toLocaleString()} SIP.</p>
 
             {reminderSet ? (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center relative z-10 h-full flex flex-col justify-center items-center">
@@ -417,7 +427,7 @@ export default function ResultsPage() {
 
         {/* TAX SAVING SECTION */}
         <div className="pt-4">
-          <TaxSavingSection monthlyIncome={result.monthly_sip * 3.5} userProfile={result} />
+          <TaxSavingSection monthlyIncome={monthlySip * 3.5} userProfile={result} />
         </div>
 
         {/* RISK ADVISORY */}
