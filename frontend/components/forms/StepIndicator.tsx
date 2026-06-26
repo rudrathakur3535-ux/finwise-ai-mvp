@@ -18,11 +18,11 @@ export function StepIndicator({ currentStep, totalSteps }: StepIndicatorProps) {
   ];
 
   return (
-    <div className="w-full mb-12">
+    <div className="w-full mb-16">
       <div className="flex items-center justify-between relative">
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-[#E2E8F0] rounded-full z-0"></div>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1.5 bg-white/10 rounded-full z-0"></div>
         <div 
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[#7C3AED] rounded-full z-0 transition-all duration-500 ease-in-out"
+          className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full z-0 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(139,92,246,0.5)]"
           style={{ width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%` }}
         ></div>
 
@@ -36,17 +36,18 @@ export function StepIndicator({ currentStep, totalSteps }: StepIndicatorProps) {
               <motion.div
                 initial={false}
                 animate={{
-                  backgroundColor: isActive || isCompleted ? "#7C3AED" : "#FFFFFF",
-                  borderColor: isActive || isCompleted ? "#7C3AED" : "#E2E8F0",
-                  color: isActive || isCompleted ? "#FFFFFF" : "#64748B",
+                  backgroundColor: isActive || isCompleted ? "#8B5CF6" : "rgba(17,24,39,0.8)",
+                  borderColor: isActive || isCompleted ? "#8B5CF6" : "rgba(255,255,255,0.2)",
+                  color: isActive || isCompleted ? "#FFFFFF" : "#9CA3AF",
+                  scale: isActive ? 1.1 : 1,
+                  boxShadow: isActive ? "0 0 20px rgba(139,92,246,0.6)" : "none"
                 }}
-                className={`w-10 h-10 rounded-full flex items-center justify-center border-2 font-bold text-sm transition-colors duration-300 shadow-sm
-                  ${isActive ? 'ring-4 ring-[#7C3AED]/20' : ''}`}
+                className={`w-12 h-12 rounded-full flex items-center justify-center border-2 font-bold text-sm transition-colors duration-300 backdrop-blur-sm`}
               >
-                {isCompleted ? <Check className="w-5 h-5 text-white font-bold" /> : stepNumber}
+                {isCompleted ? <Check className="w-6 h-6 text-white font-bold" /> : stepNumber}
               </motion.div>
-              <span className={`absolute -bottom-7 text-xs font-bold whitespace-nowrap transition-colors duration-300
-                ${isActive ? 'text-[#7C3AED]' : isCompleted ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+              <span className={`absolute -bottom-8 text-xs font-bold whitespace-nowrap transition-colors duration-300
+                ${isActive ? 'text-purple-300 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]' : isCompleted ? 'text-gray-100' : 'text-gray-300'}`}>
                 {step.label}
               </span>
             </div>

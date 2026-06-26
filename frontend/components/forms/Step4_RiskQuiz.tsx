@@ -65,32 +65,36 @@ export function Step4_RiskQuiz({ data, updateData, onNext, onBack }: Step4Props)
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-[#0F172A] tracking-tight">Risk Profile Quiz</h2>
-        <p className="text-[#64748B] mt-2">Just 3 quick questions to understand your style.</p>
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 tracking-tight mb-2">Risk Profile Quiz</h2>
+        <p className="text-gray-400">Just 3 quick questions to understand your style.</p>
       </div>
 
       <div className="space-y-8">
         {questions.map((q, qIndex) => (
-          <div key={qIndex} className="bg-white p-6 rounded-2xl border border-[#E2E8F0] shadow-sm">
-            <h3 className="font-bold text-[#0F172A] mb-5">{qIndex + 1}. {q.q}</h3>
+          <div key={qIndex} className="bg-[rgba(255,255,255,0.02)] p-6 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-inner">
+            <h3 className="font-bold text-gray-200 mb-5 text-lg"><span className="text-purple-400">{qIndex + 1}.</span> {q.q}</h3>
             <div className="space-y-3">
               {q.options.map((opt, oIndex) => {
                 const isSelected = answers[qIndex] === opt.score;
                 return (
-                  <div
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
                     key={oIndex}
                     onClick={() => handleSelect(qIndex, opt.score)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center space-x-4
-                      ${isSelected ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-semibold" : "border-[#E2E8F0] hover:border-[#7C3AED]/40 text-[#64748B] hover:bg-gray-50"}`}
+                    className={`p-4 rounded-2xl border cursor-pointer transition-all duration-300 flex items-center space-x-4
+                      ${isSelected 
+                        ? "border-purple-500 bg-purple-500/20 text-purple-300 font-semibold shadow-[0_0_15px_rgba(139,92,246,0.2)]" 
+                        : "border-[rgba(255,255,255,0.08)] hover:border-purple-500/50 text-gray-400 hover:bg-white/5"}`}
                   >
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors
-                      ${isSelected ? "border-[#7C3AED]" : "border-[#A1A1AA]"}`}
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors
+                      ${isSelected ? "border-purple-500" : "border-gray-600"}`}
                     >
-                      {isSelected && <div className="w-2.5 h-2.5 bg-[#7C3AED] rounded-full shadow-sm" />}
+                      {isSelected && <motion.div layoutId={`quiz-dot-${qIndex}`} className="w-3 h-3 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.8)]" />}
                     </div>
                     <span>{opt.text}</span>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
@@ -102,33 +106,33 @@ export function Step4_RiskQuiz({ data, updateData, onNext, onBack }: Step4Props)
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-xl p-4 flex items-center justify-between"
+          className="bg-indigo-500/10 border border-indigo-500/30 p-6 rounded-3xl mt-6 text-center shadow-inner"
         >
-          <div>
-            <p className="text-sm text-[#64748B]">Analyzed Risk Profile:</p>
-            <p className="font-bold text-[#7C3AED] capitalize">{data.risk_appetite} Investor</p>
-          </div>
-          <div className="text-3xl">
-            {data.risk_appetite === "aggressive" ? "🔥" : data.risk_appetite === "moderate" ? "⚖️" : "🛡️"}
+          <div className="text-gray-400 text-sm mb-2">Calculated Profile</div>
+          <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 capitalize drop-shadow-md">
+            {data.risk_appetite} Investor
           </div>
         </motion.div>
       )}
 
-      <div className="pt-8 flex justify-between items-center">
+      <div className="pt-8 flex justify-between items-center border-t border-[rgba(255,255,255,0.08)] mt-8">
         <button
           onClick={onBack}
-          className="text-[#64748B] hover:text-[#0F172A] font-medium px-4 py-2 flex items-center transition-colors"
+          className="text-gray-400 hover:text-white font-medium px-4 py-3 mt-4 flex items-center transition-colors rounded-xl hover:bg-white/5"
         >
           <ArrowLeft className="mr-2 w-4 h-4" /> Back
         </button>
         <motion.button
-          whileHover={isComplete ? { scale: 1.02 } : {}}
-          whileTap={isComplete ? { scale: 0.98 } : {}}
+          whileHover={isComplete ? { scale: 1.05 } : {}}
+          whileTap={isComplete ? { scale: 0.95 } : {}}
           onClick={onNext}
           disabled={!isComplete}
-          className="bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold py-3.5 px-8 rounded-xl shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="relative group bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-4 px-10 mt-4 rounded-full shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center border border-white/10"
         >
-          Next Step <ArrowRight className="ml-2 w-5 h-5" />
+          <span className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+          <span className="relative z-10 flex items-center">
+            Next Step <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </span>
         </motion.button>
       </div>
     </div>

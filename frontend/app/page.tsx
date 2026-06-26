@@ -1,272 +1,379 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { 
-  ArrowRight, 
-  BarChart2, 
-  Cpu, 
-  Bell, 
-  Wallet,
-  Globe,
-  TrendingUp,
-  CheckCircle2
+  Sparkles, CheckCircle2, PlayCircle, BarChart3, Clock, Wallet,
+  ShieldCheck, TrendingUp, Bell, Globe, ArrowRight, User, Bot, Landmark
 } from "lucide-react";
-import { PremiumButton } from "../components/ui/design-system/PremiumButton";
-import { PremiumCard } from "../components/ui/design-system/PremiumCard";
+import { PageWrapper } from "../components/ui/premium/PageWrapper";
+import { GradientButton } from "../components/ui/premium/GradientButton";
+import { AnimatedNumber } from "../components/ui/premium/AnimatedNumber";
+import { SectionHeader } from "../components/ui/premium/SectionHeader";
+import { GradientCard } from "../components/ui/premium/GradientCard";
+import { GlowBadge } from "../components/ui/premium/GlowBadge";
 
-export default function Home() {
-  const features = [
-    { icon: <Cpu className="w-6 h-6" />, title: "AI Risk Analysis", desc: "Our AI evaluates your financial profile to determine the perfect risk appetite." },
-    { icon: <TrendingUp className="w-6 h-6" />, title: "Real Fund Data", desc: "Powered by live AMFI India data to ensure accurate mutual fund selection." },
-    { icon: <Wallet className="w-6 h-6" />, title: "Tax Optimization", desc: "Smart ELSS recommendations to save up to ₹46,800 under Section 80C." },
-    { icon: <Bell className="w-6 h-6" />, title: "SIP Reminders", desc: "Never miss an investment with automated email reminders." },
-    { icon: <BarChart2 className="w-6 h-6" />, title: "Portfolio Tracking", desc: "Monitor your investments with a beautiful dashboard and live NAVs." },
-    { icon: <Globe className="w-6 h-6" />, title: "Hindi Support", desc: "Access the entire platform and AI insights in Hindi and English." }
-  ];
+export default function LandingPage() {
+  const router = useRouter();
 
-  const profiles = [
-    { name: "Rahul", age: 24, profile: "Aggressive", income: "₹60,000", bg: "bg-blue-50 text-blue-700" },
-    { name: "Priya", age: 35, profile: "Moderate", income: "₹1,20,000", bg: "bg-emerald-50 text-emerald-700" },
-    { name: "Arvind", age: 50, profile: "Conservative", income: "₹2,00,000", bg: "bg-amber-50 text-amber-700" }
-  ];
-
-  const handleDemo = (name: string) => {
-    let data;
-    if (name === "Rahul") {
-      data = { name: "Rahul", age: 24, monthly_income: 60000, monthly_savings: 20000, risk_appetite: "aggressive", goal: "Wealth Creation", horizon_years: 15, existing_amount: 0, city: "Pune" };
-    } else if (name === "Priya") {
-      data = { name: "Priya", age: 35, monthly_income: 120000, monthly_savings: 40000, risk_appetite: "moderate", goal: "Child Education", horizon_years: 10, existing_amount: 500000, city: "Mumbai" };
-    } else {
-      data = { name: "Arvind", age: 50, monthly_income: 200000, monthly_savings: 80000, risk_appetite: "conservative", goal: "Retirement", horizon_years: 5, existing_amount: 2500000, city: "Delhi" };
-    }
-    sessionStorage.setItem("demoProfile", JSON.stringify(data));
-    window.location.href = "/advisor";
+  const handleDemoClick = (profile: any) => {
+    // Store demo profile in session storage to load in advisor page
+    sessionStorage.setItem("demoProfile", JSON.stringify(profile));
+    router.push("/advisor");
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      {/* Section 1 — Hero */}
-      <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div className="min-h-screen bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900">
+      {/* Background Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-[10%] -left-[5%] w-[400px] h-[400px] rounded-full bg-blue-600 blur-[120px] animate-blob"></div>
+        <div className="absolute top-[40%] -right-[5%] w-[300px] h-[300px] rounded-full bg-cyan-500 blur-[120px] animate-blob" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <PageWrapper className="relative z-10 pt-32 pb-20">
+        
+        {/* SECTION 1: HERO */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 min-h-[75vh]">
+          
+          {/* Left Content */}
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
+          >
+            <GlowBadge 
+              text="Powered by Google Gemini AI" 
+              color="blue" 
+              icon={<Sparkles className="w-3.5 h-3.5" />} 
+              className="mb-6"
+            />
             
-            {/* Left Content */}
+            <h1 className="text-[42px] sm:text-[52px] font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6">
+              Your Personal <br />
+              <span className="grad-text-blue block pb-2">AI Investment</span> 
+              Advisor
+            </h1>
+            
+            <p className="text-[18px] text-gray-500 max-w-[480px] mb-8 leading-relaxed">
+              Get a personalized mutual fund plan in 2 minutes. Based on real AMFI data. Completely free.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              <Link href="/advisor" className="w-full sm:w-auto">
+                <GradientButton gradient="blue" className="w-full text-lg py-4 px-8">
+                  Get My Free Plan <ArrowRight className="w-5 h-5 ml-2" />
+                </GradientButton>
+              </Link>
+              <button className="flex items-center justify-center font-bold text-gray-700 hover:text-blue-600 transition-colors w-full sm:w-auto py-4 px-6 border-2 border-gray-200 hover:border-blue-200 rounded-xl bg-white">
+                <PlayCircle className="w-5 h-5 mr-2 text-blue-500" /> Watch Demo
+              </button>
+            </div>
+            
+            {/* Trust Row */}
+            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3">
+              {["Real AMFI Data", "Google Gemini AI", "100% Free", "No Sign-up Needed"].map((text, i) => (
+                <div key={i} className="flex items-center text-sm font-semibold text-gray-600">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mr-1.5" />
+                  {text}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right Visual */}
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="w-full lg:w-1/2 flex justify-center lg:justify-end"
+          >
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="max-w-2xl"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+              className="relative w-full max-w-[420px] bg-white rounded-3xl p-6 shadow-2xl border border-gray-100"
             >
-              <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-                </span>
-                <span>FinWise AI 2.0 is Live</span>
+              <div className="absolute -top-4 -right-4 bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-2 rounded-full border border-emerald-200 shadow-sm flex items-center">
+                <ShieldCheck className="w-4 h-4 mr-1" /> Verified Data
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0F172A] tracking-tight leading-[1.15] mb-6">
-                Your Personal AI <br className="hidden lg:block"/>
-                <span className="text-[#2563EB]">Investment Advisor</span>
-              </h1>
-              <p className="text-lg sm:text-xl text-[#64748B] mb-8 leading-relaxed max-w-xl">
-                Get a personalized mutual fund plan tailored to your risk profile in just 2 minutes. Free. No sign-up required.
-              </p>
               
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
-                <Link href="/advisor">
-                  <PremiumButton accentColor="#2563EB" className="w-full sm:w-auto px-8 py-4 text-base">
-                    Get My Free Plan <ArrowRight className="w-4 h-4 ml-2" />
-                  </PremiumButton>
-                </Link>
-                <Link href="#how-it-works">
-                  <PremiumButton variant="secondary" accentColor="#2563EB" className="w-full sm:w-auto px-8 py-4 text-base">
-                    See How It Works
-                  </PremiumButton>
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm font-medium text-[#64748B]">
-                <span className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-1.5 text-[#10B981]" /> Real AMFI Data</span>
-                <span className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-1.5 text-[#10B981]" /> Google Gemini AI</span>
-                <span className="flex items-center"><CheckCircle2 className="w-4 h-4 mr-1.5 text-[#10B981]" /> 100% Free</span>
-              </div>
-            </motion.div>
-
-            {/* Right Mockup */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative hidden lg:block"
-            >
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-100 to-indigo-50 rounded-[2.5rem] transform rotate-3 scale-105 -z-10"></div>
-              <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-xl relative overflow-hidden">
-                {/* Mockup Header */}
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">R</div>
-                    <div>
-                      <div className="text-sm font-bold text-[#0F172A]">Rahul's Portfolio</div>
-                      <div className="text-xs text-[#64748B]">Aggressive Growth</div>
-                    </div>
-                  </div>
-                  <div className="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
-                    Health: 8.5/10
-                  </div>
-                </div>
-
-                {/* Mockup Body */}
-                <div className="space-y-6">
+              <div className="space-y-6">
+                <div className="flex justify-between items-center pb-4 border-b border-gray-100">
                   <div>
-                    <div className="text-sm text-[#64748B] mb-1">Current Value</div>
-                    <div className="text-3xl font-extrabold text-[#0F172A] flex items-baseline">
-                      ₹1,24,500 <span className="ml-3 text-sm font-bold text-[#10B981] flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +18.2%</span>
+                    <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Risk Score</p>
+                    <div className="flex items-center">
+                      <span className="text-3xl font-black text-gray-900">8.5</span>
+                      <span className="text-gray-400 font-bold ml-1">/10</span>
+                      <span className="ml-2 px-2 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-md">⚡ Aggressive</span>
                     </div>
                   </div>
-
-                  <div className="flex space-x-2">
-                    <div className="h-2 w-1/2 bg-blue-500 rounded-full"></div>
-                    <div className="h-2 w-1/3 bg-indigo-400 rounded-full"></div>
-                    <div className="h-2 w-1/6 bg-amber-400 rounded-full"></div>
+                  <div className="w-16 h-16 rounded-full border-4 border-gray-50 flex items-center justify-center relative">
+                    <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
+                      <path
+                        className="text-gray-100"
+                        strokeWidth="4"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-blue-500"
+                        strokeDasharray="85, 100"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
                   </div>
+                </div>
 
-                  <div className="bg-blue-50/50 rounded-xl p-4 border border-blue-100">
-                    <div className="flex items-start space-x-3">
-                      <div className="bg-blue-100 p-1.5 rounded-lg text-blue-600 mt-0.5"><Cpu className="w-4 h-4"/></div>
-                      <div>
-                        <div className="text-sm font-bold text-[#0F172A] mb-1">FinWise AI Insight</div>
-                        <div className="text-xs text-[#64748B] leading-relaxed">"Tumhara portfolio bahut badhiya perform kar raha hai! Small cap funds ne accha alpha diya hai. Continue your SIPs."</div>
-                      </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 p-4 rounded-2xl">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Monthly SIP</p>
+                    <p className="text-xl font-bold text-gray-900">₹9,000</p>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                    <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">Expected 5Y</p>
+                    <p className="text-xl font-bold text-blue-700">₹24.5L</p>
+                  </div>
+                </div>
+                
+                <div className="pt-2">
+                  <div className="h-12 bg-gradient-to-r from-gray-50 to-white border border-gray-100 rounded-xl flex items-center px-4 justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                      <span className="text-sm font-bold text-gray-700">Axis Bluechip Fund</span>
                     </div>
+                    <span className="text-sm font-bold text-emerald-600">+18.5%</span>
                   </div>
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        </div>
+      </PageWrapper>
+
+      {/* SECTION 2: STATS BAR */}
+      <div className="w-full bg-blue-50/50 border-y border-blue-100/50 py-12 relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center">
+            {[
+              { label: "Plans Generated", value: 10000, suffix: "+", icon: "📊" },
+              { label: "Recommended", value: 50, prefix: "₹", suffix: "Cr+", icon: "💰" },
+              { label: "Mutual Funds", value: 200, suffix: "+", icon: "🏦" },
+              { label: "Average Time", value: 2, suffix: " Min", icon: "⚡" }
+            ].map((stat, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center justify-center"
+              >
+                <span className="text-3xl mb-2">{stat.icon}</span>
+                <h4 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-1">
+                  <AnimatedNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+                </h4>
+                <p className="text-sm font-bold text-blue-600/80 uppercase tracking-wider">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Section 2 — Stats Bar */}
-      <section className="bg-blue-50 border-y border-blue-100 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-extrabold text-blue-600 mb-1">10,000+</div>
-              <div className="text-sm font-medium text-[#64748B]">Plans Generated</div>
-            </div>
-            <div>
-              <div className="text-3xl font-extrabold text-blue-600 mb-1">₹50Cr+</div>
-              <div className="text-sm font-medium text-[#64748B]">Recommended</div>
-            </div>
-            <div>
-              <div className="text-3xl font-extrabold text-blue-600 mb-1">200+</div>
-              <div className="text-sm font-medium text-[#64748B]">Mutual Funds Analyzed</div>
-            </div>
-            <div>
-              <div className="text-3xl font-extrabold text-blue-600 mb-1">2 Min</div>
-              <div className="text-sm font-medium text-[#64748B]">Average Time</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 3 — How It Works */}
-      <section id="how-it-works" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-[#0F172A] mb-12">How FinWise AI Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Desktop connecting line */}
-            <div className="hidden md:block absolute top-1/2 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-100 -translate-y-1/2 z-0"></div>
+      <PageWrapper className="relative z-10 space-y-32 py-20">
+        
+        {/* SECTION 3: HOW IT WORKS */}
+        <section>
+          <SectionHeader 
+            badge="How it Works" 
+            accent="blue" 
+            title="Three simple steps to your financial freedom" 
+            subtitle="We handle the complex math and research. You just tell us what you want to achieve." 
+          />
+          
+          <div className="relative mt-16">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-1 bg-gradient-to-r from-blue-100 via-purple-100 to-emerald-100 z-0 rounded-full"></div>
             
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl mb-4 shadow-sm">1</div>
-              <h3 className="text-lg font-bold text-[#0F172A] mb-2">Enter Your Profile</h3>
-              <p className="text-[#64748B] text-sm">Tell us about your age, income, and financial goals in a quick form.</p>
-            </div>
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl mb-4 shadow-sm">2</div>
-              <h3 className="text-lg font-bold text-[#0F172A] mb-2">AI Analyzes Market</h3>
-              <p className="text-[#64748B] text-sm">Our algorithm matches your risk appetite with top-performing funds.</p>
-            </div>
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 bg-[#2563EB] rounded-full flex items-center justify-center text-white font-bold text-xl mb-4 shadow-md shadow-blue-200">3</div>
-              <h3 className="text-lg font-bold text-[#0F172A] mb-2">Get Your Plan</h3>
-              <p className="text-[#64748B] text-sm">Instantly receive a diversified portfolio and start investing smartly.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+              {[
+                { step: "Step 1", title: "Enter Profile", desc: "Tell us your income, goals, and risk appetite", color: "blue", icon: User },
+                { step: "Step 2", title: "AI Analyzes", desc: "Gemini AI + AMFI data creates your profile", color: "purple", icon: Bot },
+                { step: "Step 3", title: "Get Your Plan", desc: "Personalized fund recommendations instantly", color: "green", icon: TrendingUp }
+              ].map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <motion.div 
+                    key={i}
+                    whileHover={{ y: -5 }}
+                    className="flex flex-col items-center text-center bg-white p-8 rounded-[24px] border border-gray-100 shadow-sm"
+                  >
+                    <div className={`w-24 h-24 rounded-full mb-6 flex items-center justify-center shadow-md grad-${s.color} text-white`}>
+                      <Icon className="w-10 h-10" />
+                    </div>
+                    <span className={`text-xs font-bold uppercase tracking-wider mb-2 text-${s.color}-600`}>{s.step}</span>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{s.title}</h3>
+                    <p className="text-gray-500">{s.desc}</p>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Section 4 — Features Grid */}
-      <section className="py-20 bg-[#F8FAFC]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-[#0F172A] mb-4">Everything You Need</h2>
-            <p className="text-[#64748B] max-w-2xl mx-auto">A complete suite of tools designed to help you build wealth, optimize taxes, and track your performance effortlessly.</p>
-          </div>
+        {/* SECTION 4: FEATURES GRID */}
+        <section>
+          <SectionHeader 
+            badge="Features" 
+            accent="blue" 
+            title="Everything You Need" 
+            subtitle="Built specifically for first-time Indian investors who want to make smart money decisions." 
+          />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <PremiumCard key={i} className="hover:-translate-y-1 transition-transform duration-300">
-                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4">
-                  {f.icon}
-                </div>
-                <h3 className="text-lg font-bold text-[#0F172A] mb-2">{f.title}</h3>
-                <p className="text-[#64748B] text-sm leading-relaxed">{f.desc}</p>
-              </PremiumCard>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: "AI Risk Analysis", desc: "Smart scoring based on your complete profile", color: "blue" as const, icon: ShieldCheck },
+              { title: "Real Fund Data", desc: "Live AMFI data — 200+ verified mutual funds", color: "green" as const, icon: BarChart3 },
+              { title: "Tax Optimization", desc: "Save up to ₹46,800 with ELSS recommendations", color: "indigo" as const, icon: Landmark },
+              { title: "SIP Reminders", desc: "Never miss your monthly investment cycle", color: "purple" as const, icon: Bell },
+              { title: "Portfolio Tracking", desc: "Monitor your performance in real-time", color: "amber" as const, icon: Wallet },
+              { title: "Hindi Support", desc: "Full Hindi language support available", color: "blue" as const, icon: Globe }
+            ].map((f, i) => {
+              const Icon = f.icon;
+              return (
+                <GradientCard key={i} gradient={f.color} delay={i * 0.1} className="flex flex-col">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 grad-${f.color} text-white shadow-sm`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                </GradientCard>
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Section 5 — Demo Profiles */}
-      <section className="py-20 bg-white border-t border-[#E2E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-[#0F172A] mb-4">Try with a Sample Profile</h2>
-          <p className="text-[#64748B] mb-12">Not ready to enter your own details? See how it works instantly.</p>
+        {/* SECTION 5: DEMO PROFILES */}
+        <section>
+          <SectionHeader 
+            badge="See It In Action" 
+            accent="purple" 
+            title="Try with a real investor profile" 
+            subtitle="Click on any profile below to instantly generate a mutual fund portfolio tailored to them." 
+          />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {profiles.map((p, i) => (
-              <PremiumCard key={i} className="text-left flex flex-col justify-between h-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            {/* Profile 1 */}
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm border-t-[4px] border-t-blue-500 p-6 flex flex-col h-full">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="text-4xl">👨</div>
                 <div>
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-[#0F172A] font-bold text-lg">
-                      {p.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[#0F172A]">{p.name}, {p.age}</h3>
-                      <p className="text-xs text-[#64748B]">{p.income}/month</p>
-                    </div>
-                  </div>
-                  <div className={`inline-block px-3 py-1 rounded-md text-xs font-semibold mb-6 ${p.bg}`}>
-                    {p.profile} Investor
-                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">Rahul</h3>
+                  <p className="text-sm text-gray-500">24 years old</p>
                 </div>
-                <PremiumButton 
-                  variant="secondary" 
-                  className="w-full text-sm py-2.5" 
-                  onClick={() => handleDemo(p.name)}
-                >
-                  Try {p.name}'s Plan
-                </PremiumButton>
-              </PremiumCard>
-            ))}
+              </div>
+              <div className="space-y-3 mb-8 flex-grow">
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Income</span><span className="font-bold text-gray-900">₹60,000/mo</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Style</span><span className="font-bold text-gray-900">Aggressive</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Risk Score</span><span className="font-bold text-blue-600">9.2/10</span></div>
+              </div>
+              <GradientButton 
+                gradient="blue" 
+                variant="outline" 
+                className="w-full"
+                onClick={() => handleDemoClick({ name: "Rahul", age: 24, monthly_income: 60000, monthly_savings: 15000, existing_amount: 0, risk_appetite: "aggressive", goal: "Wealth Creation", horizon_years: 15, city: "Pune" })}
+              >
+                Try Rahul's Plan →
+              </GradientButton>
+            </motion.div>
+
+            {/* Profile 2 (Featured) */}
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl border border-purple-100 shadow-lg shadow-purple-500/10 border-t-[6px] border-t-purple-500 p-8 flex flex-col h-full relative transform md:scale-105 z-10">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                Most Popular
+              </div>
+              <div className="flex items-center space-x-4 mb-6 mt-2">
+                <div className="text-4xl">👩</div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Priya</h3>
+                  <p className="text-sm text-gray-500">35 years old</p>
+                </div>
+              </div>
+              <div className="space-y-4 mb-8 flex-grow">
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Income</span><span className="font-bold text-gray-900">₹1,20,000/mo</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Style</span><span className="font-bold text-gray-900">Moderate</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Risk Score</span><span className="font-bold text-purple-600">6.5/10</span></div>
+              </div>
+              <GradientButton 
+                gradient="purple" 
+                variant="primary" 
+                className="w-full"
+                onClick={() => handleDemoClick({ name: "Priya", age: 35, monthly_income: 120000, monthly_savings: 30000, existing_amount: 500000, risk_appetite: "moderate", goal: "Child Education", horizon_years: 10, city: "Mumbai" })}
+              >
+                Try Priya's Plan →
+              </GradientButton>
+            </motion.div>
+
+            {/* Profile 3 */}
+            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-2xl border border-gray-100 shadow-sm border-t-[4px] border-t-emerald-500 p-6 flex flex-col h-full">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="text-4xl">👴</div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Sharma Ji</h3>
+                  <p className="text-sm text-gray-500">52 years old</p>
+                </div>
+              </div>
+              <div className="space-y-3 mb-8 flex-grow">
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Income</span><span className="font-bold text-gray-900">₹2,00,000/mo</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Style</span><span className="font-bold text-gray-900">Conservative</span></div>
+                <div className="flex justify-between text-sm"><span className="text-gray-500">Risk Score</span><span className="font-bold text-emerald-600">3.0/10</span></div>
+              </div>
+              <GradientButton 
+                gradient="green" 
+                variant="outline" 
+                className="w-full"
+                onClick={() => handleDemoClick({ name: "Sharma Ji", age: 52, monthly_income: 200000, monthly_savings: 50000, existing_amount: 2500000, risk_appetite: "conservative", goal: "Retirement", horizon_years: 8, city: "Delhi" })}
+              >
+                Try Sharma Ji's Plan →
+              </GradientButton>
+            </motion.div>
+          </div>
+        </section>
+
+      </PageWrapper>
+
+      {/* SECTION 6: FOOTER */}
+      <footer className="bg-gray-50 border-t border-gray-100 py-12 pb-24 md:pb-12 relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center space-x-2">
+            <div className="bg-gradient-to-tr from-blue-500 to-cyan-400 p-1.5 rounded-lg">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-bold text-lg text-gray-900">
+              FinWise<span className="text-blue-600">AI</span>
+            </span>
+          </div>
+          
+          <div className="flex space-x-6 text-sm font-semibold text-gray-500">
+            <a href="#" className="hover:text-blue-600 transition-colors">About</a>
+            <a href="#" className="hover:text-blue-600 transition-colors">Disclaimer</a>
+            <a href="#" className="hover:text-blue-600 transition-colors">Privacy</a>
+          </div>
+          
+          <div className="flex flex-col items-center md:items-end text-xs text-gray-400 space-y-1">
+            <p>Built with ❤️ for Indian investors</p>
+            <p className="font-semibold text-amber-600 flex items-center">
+              <ShieldCheck className="w-3 h-3 mr-1" /> Not SEBI registered advice
+            </p>
+            <p>© {new Date().getFullYear()} FinWise AI</p>
           </div>
         </div>
-      </section>
-
-      {/* CTA Footer */}
-      <section className="bg-gradient-to-br from-[#0F172A] to-[#1E293B] py-20 text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to secure your financial future?</h2>
-          <p className="text-blue-200 mb-10 text-lg">Join thousands of Indians making smarter investment decisions with AI.</p>
-          <Link href="/advisor">
-            <PremiumButton accentColor="#2563EB" className="px-10 py-4 text-base shadow-[0_0_20px_rgba(37,99,235,0.4)]">
-              Build My Portfolio Now
-            </PremiumButton>
-          </Link>
-        </div>
-      </section>
+      </footer>
     </div>
   );
 }
