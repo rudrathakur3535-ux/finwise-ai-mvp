@@ -34,7 +34,8 @@ export function SIPReminderCard({ userName, totalSip, funds }: Props) {
 
   const fetchReminderData = async (userEmail: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/reminders/next?email=${encodeURIComponent(userEmail)}`);
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const res = await fetch(`${API_BASE_URL}/api/reminders/next?email=${encodeURIComponent(userEmail)}`);
       if (res.ok) {
         const data = await res.json();
         setReminderData(data);
@@ -58,7 +59,8 @@ export function SIPReminderCard({ userName, totalSip, funds }: Props) {
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/reminders/set", {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API_BASE_URL}/api/reminders/set`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

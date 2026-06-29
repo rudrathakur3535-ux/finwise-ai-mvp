@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell } from "lucide-react";
+import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell, Cpu } from "lucide-react";
 import { GradientButton } from "../ui/premium/GradientButton";
 
 export function Navbar() {
@@ -24,8 +24,8 @@ export function Navbar() {
     { name: "Home", path: "/", icon: Home },
     { name: "AI Advisor", path: "/advisor", icon: Bot },
     { name: "Portfolio", path: "/portfolio", icon: PieChart },
-    { name: "Tax Saving", path: "/tax-saving", icon: Landmark },
-    { name: "Reminders", path: "/reminders", icon: Bell },
+    { name: "Tax", path: "/tax-saving", icon: Landmark },
+    { name: "ML Engine", path: "/ml-status", icon: Cpu },
   ];
 
   const handleTranslate = () => {
