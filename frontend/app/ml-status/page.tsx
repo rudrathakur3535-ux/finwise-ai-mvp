@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Target, BarChart2, TrendingUp, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
-import Navbar from '../../components/layout/Navbar';
+import { Navbar } from '../../components/layout/Navbar';
 
 export default function MLStatusPage() {
   const [mlData, setMlData] = useState<any>(null);

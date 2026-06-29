@@ -73,6 +73,8 @@ export interface AdvisorResponse {
   };
   recommended_funds: RecommendedFund[];
   ai_advice: string;
+  ml_powered?: boolean;
+  ml_summary?: Record<string, any>;
 }
 
 export interface TaxSavingData {
