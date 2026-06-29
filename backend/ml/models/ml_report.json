@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-06-29T18:41:05.109896",
+  "models": {
+    "risk_classifier": {
+      "algorithm": "Random Forest",
+      "accuracy": 86.2,
+      "dataset_size": 5000,
+      "status": "production"
+    },
+    "fund_recommender": {
+      "algorithm": "XGBoost",
+      "accuracy": 73.6,
+      "dataset_size": 3000,
+      "status": "production"
+    },
+    "return_predictor": {
+      "algorithm": "Random Forest Regressor",
+      "r2_score": 0.93,
+      "dataset_size": 4000,
+      "status": "production"
+    }
+  },
+  "total_models": 3,
+  "total_samples": 12000
+}
