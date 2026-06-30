@@ -1,16 +1,14 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-import json
 
 from services.portfolio_service import (
     calculate_portfolio_performance, 
     get_portfolio_health, 
-    generate_portfolio_insight,
-    load_portfolios,
-    save_portfolios
+    generate_portfolio_insight
 )
+from database.connection import get_db
 
 router = APIRouter()
 
@@ -28,7 +26,7 @@ class TrackPortfolioRequest(BaseModel):
     risk_score: float = 5.0
 
 @router.post("/track")
-async def track_portfolio(req: TrackPortfolioRequest):
+async def track_portfolio(req: TrackPortfolioRequest, db = Depends(get_db)):
     if not req.funds:
         raise HTTPException(status_code=400, detail="Funds list cannot be empty")
         
@@ -47,52 +45,47 @@ async def track_portfolio(req: TrackPortfolioRequest):
     ai_insight = generate_portfolio_insight(perf_data)
     perf_data["ai_insight"] = ai_insight
     
-    # 4. Save to JSON
-    data = load_portfolios()
+    # 4. Save to MongoDB
+    existing_portfolio = await db.portfolios.find_one({"email": req.email})
     
-    # Check if user already exists
-    found = False
-    for p in data["portfolios"]:
-        if p["email"] == req.email:
-            p["user_name"] = req.user_name
-            p["funds"] = funds_list
-            p["risk_score"] = req.risk_score
-            p["last_updated"] = datetime.now().isoformat()
-            p["summary"] = perf_data
-            found = True
-            break
-            
-    if not found:
-        data["portfolios"].append({
+    if existing_portfolio:
+        await db.portfolios.update_one(
+            {"email": req.email},
+            {"$set": {
+                "user_name": req.user_name,
+                "funds": funds_list,
+                "risk_score": req.risk_score,
+                "last_updated": datetime.utcnow().isoformat(),
+                "summary": perf_data
+            }}
+        )
+    else:
+        await db.portfolios.insert_one({
             "user_name": req.user_name,
             "email": req.email,
             "funds": funds_list,
             "risk_score": req.risk_score,
-            "created_at": datetime.now().isoformat(),
-            "last_updated": datetime.now().isoformat(),
+            "created_at": datetime.utcnow().isoformat(),
+            "last_updated": datetime.utcnow().isoformat(),
             "summary": perf_data
         })
         
-    save_portfolios(data)
-    
     return perf_data
 
 @router.get("/summary")
-async def get_portfolio_summary(email: str = Query(..., description="User's email")):
-    data = load_portfolios()
-    for p in data["portfolios"]:
-        if p["email"] == email:
-            return p["summary"]
+async def get_portfolio_summary(email: str = Query(..., description="User's email"), db = Depends(get_db)):
+    portfolio = await db.portfolios.find_one({"email": email})
+    if portfolio:
+        return portfolio.get("summary", {})
     raise HTTPException(status_code=404, detail="Portfolio not found for this email")
 
 @router.get("/rebalance")
-async def get_rebalance_recommendations(email: str = Query(..., description="User's email")):
-    data = load_portfolios()
-    for p in data["portfolios"]:
-        if p["email"] == email:
-            summary = p["summary"]
-            return {
-                "rebalancing_needed": summary.get("rebalancing_needed", False),
-                "suggestions": summary.get("rebalancing_suggestions", [])
-            }
+async def get_rebalance_recommendations(email: str = Query(..., description="User's email"), db = Depends(get_db)):
+    portfolio = await db.portfolios.find_one({"email": email})
+    if portfolio:
+        summary = portfolio.get("summary", {})
+        return {
+            "rebalancing_needed": summary.get("rebalancing_needed", False),
+            "suggestions": summary.get("rebalancing_suggestions", [])
+        }
     raise HTTPException(status_code=404, detail="Portfolio not found for this email")

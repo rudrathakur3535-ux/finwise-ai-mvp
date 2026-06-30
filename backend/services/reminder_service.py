@@ -1,26 +1,9 @@
-import json
 import os
 from datetime import datetime, date, timedelta
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-REMINDERS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "reminders.json")
-
-def load_reminders():
-    if not os.path.exists(REMINDERS_FILE):
-        os.makedirs(os.path.dirname(REMINDERS_FILE), exist_ok=True)
-        return {"reminders": []}
-    with open(REMINDERS_FILE, "r") as f:
-        try:
-            return json.load(f)
-        except json.JSONDecodeError:
-            return {"reminders": []}
-
-def save_reminders(data):
-    os.makedirs(os.path.dirname(REMINDERS_FILE), exist_ok=True)
-    with open(REMINDERS_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+from database.connection import db_instance
 
 def calculate_next_sip_date(sip_day: int):
     today = date.today()
@@ -48,46 +31,47 @@ def calculate_next_sip_date(sip_day: int):
             
     return next_sip
 
-def add_reminder(user_name, email, sip_date, funds):
-    data = load_reminders()
+async def add_reminder(user_name, email, sip_date, funds, db):
+    existing = await db.reminders.find_one({"email": email})
     
-    # Check if user already exists, update if they do
-    found = False
-    for r in data["reminders"]:
-        if r["email"] == email:
-            r["user_name"] = user_name
-            r["sip_date"] = sip_date
-            r["funds"] = funds
-            r["updated_at"] = datetime.now().isoformat()
-            found = True
-            break
-            
-    if not found:
-        data["reminders"].append({
+    if existing:
+        await db.reminders.update_one(
+            {"email": email},
+            {"$set": {
+                "user_name": user_name,
+                "sip_date": sip_date,
+                "funds": funds,
+                "updated_at": datetime.utcnow().isoformat()
+            }}
+        )
+    else:
+        await db.reminders.insert_one({
             "user_name": user_name,
             "email": email,
             "sip_date": sip_date,
             "funds": funds,
-            "created_at": datetime.now().isoformat()
+            "created_at": datetime.utcnow().isoformat()
         })
         
-    save_reminders(data)
     next_date = calculate_next_sip_date(sip_date)
     return next_date
 
-def get_reminder(email):
-    data = load_reminders()
-    for r in data["reminders"]:
-        if r["email"] == email:
-            next_date = calculate_next_sip_date(r["sip_date"])
-            days_until = (next_date - date.today()).days
-            total_sip = sum(f["monthly_sip"] for f in r["funds"])
-            return {
-                "reminder": r,
-                "next_sip_date": next_date,
-                "days_until": days_until,
-                "total_sip": total_sip
-            }
+async def get_reminder(email, db):
+    r = await db.reminders.find_one({"email": email})
+    if r:
+        next_date = calculate_next_sip_date(r["sip_date"])
+        days_until = (next_date - date.today()).days
+        total_sip = sum(f["monthly_sip"] for f in r["funds"])
+        
+        # Convert _id to string
+        r["_id"] = str(r["_id"])
+        
+        return {
+            "reminder": r,
+            "next_sip_date": next_date,
+            "days_until": days_until,
+            "total_sip": total_sip
+        }
     return None
 
 def send_reminder_email(user_name, email, sip_date, total_amount, funds):
@@ -146,12 +130,18 @@ Happy Investing! 🚀"""
         print(f"Failed to send email: {e}")
         return False
 
-def check_and_send_reminders():
+async def check_and_send_reminders():
     print("Checking for SIP reminders...")
-    data = load_reminders()
+    if db_instance.db is None:
+        print("DB not connected for reminders.")
+        return
+        
+    cursor = db_instance.db.reminders.find({})
+    reminders = await cursor.to_list(length=1000)
+    
     today = date.today()
     
-    for r in data["reminders"]:
+    for r in reminders:
         next_date = calculate_next_sip_date(r["sip_date"])
         # Send reminder 3 days before
         target_reminder_date = next_date - timedelta(days=3)

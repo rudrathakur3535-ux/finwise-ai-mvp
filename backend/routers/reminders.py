@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from pydantic import BaseModel
 from typing import List
 from services.reminder_service import add_reminder, get_reminder
+from database.connection import get_db
 
 router = APIRouter()
 
@@ -16,15 +17,16 @@ class ReminderRequest(BaseModel):
     funds: List[FundItem]
 
 @router.post("/set")
-async def set_reminder(req: ReminderRequest):
+async def set_reminder(req: ReminderRequest, db = Depends(get_db)):
     if req.sip_date < 1 or req.sip_date > 28:
         raise HTTPException(status_code=400, detail="SIP date must be between 1 and 28")
         
-    next_date = add_reminder(
+    next_date = await add_reminder(
         req.user_name, 
         req.email, 
         req.sip_date, 
-        [f.model_dump() for f in req.funds]
+        [f.model_dump() for f in req.funds],
+        db
     )
     
     return {
@@ -34,8 +36,8 @@ async def set_reminder(req: ReminderRequest):
     }
 
 @router.get("/next")
-async def get_next_reminder(email: str = Query(..., description="User's email")):
-    reminder_data = get_reminder(email)
+async def get_next_reminder(email: str = Query(..., description="User's email"), db = Depends(get_db)):
+    reminder_data = await get_reminder(email, db)
     if not reminder_data:
         raise HTTPException(status_code=404, detail="No reminder found for this email")
         

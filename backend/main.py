@@ -21,15 +21,20 @@ from contextlib import asynccontextmanager
 
 scheduler = BackgroundScheduler()
 
+from database.connection import db_instance
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Start scheduler
+    # Startup: Connect to DB and start scheduler
+    await db_instance.connect_db()
+    
     scheduler.add_job(check_and_send_reminders, 'cron', hour=9, minute=0)
     scheduler.start()
     print("APScheduler started: Daily SIP reminders scheduled for 9:00 AM.")
     yield
     # Shutdown
     scheduler.shutdown()
+    await db_instance.close_db()
 
 app = FastAPI(
     title="FinWise AI API",

@@ -41,7 +41,8 @@ class UserProfile(BaseModel):
 
 
 from fastapi import Depends
-from services.auth_service import get_current_user, load_users, save_users
+from services.auth_service import get_current_user
+from database.connection import get_db
 import os, json
 from datetime import datetime
 
@@ -51,7 +52,7 @@ from datetime import datetime
 # Profile → Risk → Allocation → Funds → AI
 # ----------------------------------------
 @router.post("/advice")
-async def get_financial_advice(profile: UserProfile, current_user: dict = Depends(get_current_user)):
+async def get_financial_advice(profile: UserProfile, current_user: dict = Depends(get_current_user), db = Depends(get_db)):
     """
     🧠 FinWise AI ka main endpoint.
     """
@@ -210,29 +211,18 @@ async def get_financial_advice(profile: UserProfile, current_user: dict = Depend
         }
 
         # --- Increment limit and Save Plan ---
-        users = load_users()
-        for u in users:
-            if u["user_id"] == current_user["user_id"]:
-                u["plans_used_this_month"] = u.get("plans_used_this_month", 0) + 1
-                break
-        save_users(users)
+        await db.users.update_one(
+            {"user_id": current_user["user_id"]},
+            {"$inc": {"plans_used_this_month": 1}}
+        )
 
-        # Save to saved_plans.json
-        SAVED_PLANS_FILE = "data/saved_plans.json"
-        if os.path.exists(SAVED_PLANS_FILE):
-            with open(SAVED_PLANS_FILE, "r") as f:
-                saved_plans = json.load(f)
-        else:
-            saved_plans = []
-            
-        saved_plans.append({
+        # Save to saved_plans in MongoDB
+        await db.saved_plans.insert_one({
             "user_id": current_user["user_id"],
             "date": datetime.utcnow().isoformat(),
             "profile_name": profile.name,
             "plan_data": final_response
         })
-        with open(SAVED_PLANS_FILE, "w") as f:
-            json.dump(saved_plans, f, indent=2)
 
         return final_response
 

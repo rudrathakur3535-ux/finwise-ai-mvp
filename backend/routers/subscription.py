@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
-from services.auth_service import get_current_user, load_users, save_users
+from services.auth_service import get_current_user
+from database.connection import get_db
 
 router = APIRouter()
 
@@ -8,17 +9,15 @@ class UpgradeRequest(BaseModel):
     tier: str  # "pro" or "premium"
 
 @router.post("/upgrade")
-async def upgrade_subscription(req: UpgradeRequest, current_user: dict = Depends(get_current_user)):
+async def upgrade_subscription(req: UpgradeRequest, current_user: dict = Depends(get_current_user), db = Depends(get_db)):
     if req.tier not in ["pro", "premium"]:
         raise HTTPException(status_code=400, detail="Invalid tier")
         
-    users = load_users()
-    for u in users:
-        if u["user_id"] == current_user["user_id"]:
-            u["subscription_tier"] = req.tier
-            break
+    await db.users.update_one(
+        {"user_id": current_user["user_id"]},
+        {"$set": {"subscription_tier": req.tier}}
+    )
             
-    save_users(users)
     return {"status": "success", "message": f"Successfully upgraded to {req.tier}", "new_tier": req.tier}
 
 @router.get("/usage")

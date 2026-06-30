@@ -4,9 +4,10 @@ from typing import Optional
 import uuid
 from datetime import datetime, timedelta
 from services.auth_service import (
-    load_users, save_users, get_password_hash, verify_password, 
+    get_password_hash, verify_password, 
     create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
 )
+from database.connection import get_db
 
 router = APIRouter()
 
@@ -25,10 +26,9 @@ class Token(BaseModel):
     user: dict
 
 @router.post("/signup", response_model=Token)
-async def signup(user_data: UserSignup):
-    users = load_users()
-    
-    if any(u["email"] == user_data.email for u in users):
+async def signup(user_data: UserSignup, db = Depends(get_db)):
+    existing_user = await db.users.find_one({"email": user_data.email})
+    if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
@@ -47,22 +47,20 @@ async def signup(user_data: UserSignup):
         "created_at": datetime.utcnow().isoformat()
     }
     
-    users.append(new_user)
-    save_users(users)
+    await db.users.insert_one(new_user)
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user_id}, expires_delta=access_token_expires
     )
     
-    user_info = {k: v for k, v in new_user.items() if k != "password_hash"}
+    user_info = {k: v for k, v in new_user.items() if k not in ["password_hash", "_id"]}
     
     return {"access_token": access_token, "token_type": "bearer", "user": user_info}
 
 @router.post("/login", response_model=Token)
-async def login(user_data: UserLogin):
-    users = load_users()
-    user = next((u for u in users if u["email"] == user_data.email), None)
+async def login(user_data: UserLogin, db = Depends(get_db)):
+    user = await db.users.find_one({"email": user_data.email})
     
     if not user or not verify_password(user_data.password, user["password_hash"]):
         raise HTTPException(
@@ -76,11 +74,11 @@ async def login(user_data: UserLogin):
         data={"sub": user["user_id"]}, expires_delta=access_token_expires
     )
     
-    user_info = {k: v for k, v in user.items() if k != "password_hash"}
+    user_info = {k: v for k, v in user.items() if k not in ["password_hash", "_id"]}
     
     return {"access_token": access_token, "token_type": "bearer", "user": user_info}
 
 @router.get("/me")
 async def read_users_me(current_user: dict = Depends(get_current_user)):
-    user_info = {k: v for k, v in current_user.items() if k != "password_hash"}
+    user_info = {k: v for k, v in current_user.items() if k not in ["password_hash", "_id"]}
     return user_info
