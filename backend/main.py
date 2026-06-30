@@ -21,13 +21,17 @@ from contextlib import asynccontextmanager
 
 scheduler = BackgroundScheduler()
 
-from database.connection import db_instance
+from database.connection import db_instance, get_db
+from database.setup_indexes import create_all_indexes
+from fastapi import Depends
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Connect to DB and start scheduler
     await db_instance.connect_db()
-    
+    if db_instance.db is not None:
+        await create_all_indexes(db_instance.db)
+        
     scheduler.add_job(check_and_send_reminders, 'cron', hour=9, minute=0)
     scheduler.start()
     print("APScheduler started: Daily SIP reminders scheduled for 9:00 AM.")
@@ -70,3 +74,29 @@ def health():
             "POST /api/advice → Get AI financial advice",
         ]
     }
+
+@app.get("/health/database")
+async def health_database(db = Depends(get_db)):
+    try:
+        users_count = await db.users.count_documents({})
+        plans_count = await db.saved_plans.count_documents({})
+        portfolios_count = await db.portfolios.count_documents({})
+        reminders_count = await db.reminders.count_documents({})
+        
+        return {
+            "database": "connected",
+            "database_name": db.name,
+            "collections": {
+                "users": users_count,
+                "saved_plans": plans_count,
+                "portfolios": portfolios_count,
+                "reminders": reminders_count
+            },
+            "status": "healthy"
+        }
+    except Exception as e:
+        return {
+            "database": "disconnected",
+            "error": str(e),
+            "status": "unhealthy"
+        }
