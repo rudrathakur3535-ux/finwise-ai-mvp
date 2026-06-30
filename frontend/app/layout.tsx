@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Personalized investment plan in 2 minutes. Free.",
 };
 
+import { Providers } from "@/components/Providers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,12 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900">
-        
-        <Navbar />
-        
-        <main className="flex-grow z-10 w-full relative">
-          {children}
-        </main>
+        <Providers>
+          <Navbar />
+          
+          <main className="flex-grow z-10 w-full relative">
+            {children}
+          </main>
+        </Providers>
 
         <Script
           type="text/javascript"

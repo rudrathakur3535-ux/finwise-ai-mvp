@@ -4,3 +4,7 @@ __pycache__/
 .env
 node_modules/
 .next/
+
+# Ensure ML models are pushed for Render deployment
+!backend/ml/models/*.pkl
+!backend/ml/models/*.json

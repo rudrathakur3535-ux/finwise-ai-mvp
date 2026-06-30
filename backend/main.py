@@ -12,6 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.advisor import router as advisor_router
 from routers.reminders import router as reminders_router
 from routers.portfolio import router as portfolio_router
+from routers.auth import router as auth_router
+from routers.subscription import router as subscription_router
+from routers.dashboard import router as dashboard_router
 from services.reminder_service import check_and_send_reminders
 from apscheduler.schedulers.background import BackgroundScheduler
 from contextlib import asynccontextmanager
@@ -47,6 +50,9 @@ app.add_middleware(
 app.include_router(advisor_router)
 app.include_router(reminders_router, prefix="/api/reminders", tags=["Reminders"])
 app.include_router(portfolio_router, prefix="/api/portfolio", tags=["Portfolio"])
+app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
+app.include_router(subscription_router, prefix="/api/subscription", tags=["Subscription"])
+app.include_router(dashboard_router, prefix="/api/dashboard", tags=["Dashboard"])
 
 
 @app.get("/health")

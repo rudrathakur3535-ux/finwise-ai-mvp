@@ -40,23 +40,31 @@ class UserProfile(BaseModel):
     horizon_years:   int   = Field(..., ge=1, le=30,      description="Investment horizon (1-30 years)")
 
 
+from fastapi import Depends
+from services.auth_service import get_current_user, load_users, save_users
+import os, json
+from datetime import datetime
+
 # ----------------------------------------
 # MAIN ENDPOINT — /api/advice
 # Yeh pura pipeline chalata hai:
 # Profile → Risk → Allocation → Funds → AI
 # ----------------------------------------
 @router.post("/advice")
-async def get_financial_advice(profile: UserProfile):
+async def get_financial_advice(profile: UserProfile, current_user: dict = Depends(get_current_user)):
     """
     🧠 FinWise AI ka main endpoint.
-
-    Flow:
-    1. User profile se risk score calculate karo
-    2. Risk score se portfolio allocation decide karo
-    3. Allocation se best funds select karo
-    4. Gemini AI se personalized advice lo
-    5. Sab combine karke response bhejo
     """
+    
+    # --- Check Usage Limits for Free Tier ---
+    tier = current_user.get("subscription_tier", "free")
+    plans_used = current_user.get("plans_used_this_month", 0)
+    
+    if tier == "free" and plans_used >= 3:
+        raise HTTPException(
+            status_code=402,
+            detail="You've used your 3 free plans this month! Upgrade to Pro for unlimited AI plans."
+        )
 
     try:
         # ----- STEP 1: Risk Score -----
@@ -162,9 +170,8 @@ async def get_financial_advice(profile: UserProfile):
         total_corpus = sum(f["projection"]["base"] for f in selected_funds)
 
         # ----- FINAL RESPONSE -----
-        return {
+        final_response = {
             "status": "success",
-
             "user_profile": {
                 "age":             profile.age,
                 "monthly_income":  profile.monthly_income,
@@ -172,7 +179,6 @@ async def get_financial_advice(profile: UserProfile):
                 "risk_appetite":   profile.risk_appetite,
                 "horizon_years":   profile.horizon_years,
             },
-
             "risk_assessment": {
                 "score":       risk_result["score"],
                 "max_score":   risk_result["max_score"],
@@ -187,15 +193,12 @@ async def get_financial_advice(profile: UserProfile):
                 "rule_score":    risk_result.get("rule_score"),
                 "ml_confidence": risk_result.get("ml_confidence"),
             },
-
             "portfolio": {
                 "allocation":   allocation_summary,
                 "total_sip":    total_sip,
                 "total_corpus": total_corpus,
             },
-
             "recommended_funds": selected_funds,
-            
             "ml_summary": {
                 "risk_model_accuracy": "86.2%",
                 "fund_model_accuracy": "73.7%",
@@ -203,9 +206,35 @@ async def get_financial_advice(profile: UserProfile):
                 "total_ml_models": 3,
                 "ml_fully_powered": True
             },
-
             "ai_advice": ai_advice,
         }
+
+        # --- Increment limit and Save Plan ---
+        users = load_users()
+        for u in users:
+            if u["user_id"] == current_user["user_id"]:
+                u["plans_used_this_month"] = u.get("plans_used_this_month", 0) + 1
+                break
+        save_users(users)
+
+        # Save to saved_plans.json
+        SAVED_PLANS_FILE = "data/saved_plans.json"
+        if os.path.exists(SAVED_PLANS_FILE):
+            with open(SAVED_PLANS_FILE, "r") as f:
+                saved_plans = json.load(f)
+        else:
+            saved_plans = []
+            
+        saved_plans.append({
+            "user_id": current_user["user_id"],
+            "date": datetime.utcnow().isoformat(),
+            "profile_name": profile.name,
+            "plan_data": final_response
+        })
+        with open(SAVED_PLANS_FILE, "w") as f:
+            json.dump(saved_plans, f, indent=2)
+
+        return final_response
 
     except Exception as e:
         raise HTTPException(

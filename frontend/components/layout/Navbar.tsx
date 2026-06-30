@@ -4,13 +4,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell, Cpu } from "lucide-react";
+import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell, Cpu, User as UserIcon, LogOut, Settings, CreditCard } from "lucide-react";
 import { GradientButton } from "../ui/premium/GradientButton";
+import { useAuth } from "@/lib/auth";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,11 +108,54 @@ export function Navbar() {
             >
               EN/हिं
             </button>
-            <Link href="/advisor">
-              <GradientButton variant="primary" gradient="blue" className="!py-2 !px-5 !text-sm">
-                Get Started
-              </GradientButton>
-            </Link>
+            
+            {user ? (
+              <div className="relative">
+                <button 
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center space-x-2 p-1 pr-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-full transition-all"
+                >
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">{user.name.split(' ')[0]}</span>
+                </button>
+                
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    <div className="p-3 border-b border-gray-50">
+                      <p className="text-sm font-bold text-gray-900">{user.name}</p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      <div className="mt-2 inline-block px-2 py-1 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md">
+                        {user.subscription_tier} Tier
+                      </div>
+                    </div>
+                    <div className="p-2 space-y-1">
+                      <Link href="/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <UserIcon className="w-4 h-4 mr-2 text-gray-400" /> Dashboard
+                      </Link>
+                      <Link href="/pricing" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <CreditCard className="w-4 h-4 mr-2 text-gray-400" /> Subscription
+                      </Link>
+                      <button onClick={() => { logout(); setDropdownOpen(false); }} className="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg text-left">
+                        <LogOut className="w-4 h-4 mr-2 text-red-400" /> Sign out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link href="/login" className="text-sm font-bold text-gray-600 hover:text-gray-900 px-3 py-2">
+                  Log in
+                </Link>
+                <Link href="/signup">
+                  <GradientButton variant="primary" gradient="blue" className="!py-2 !px-5 !text-sm">
+                    Sign up Free
+                  </GradientButton>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -167,11 +213,28 @@ export function Navbar() {
                 >
                   Switch Language (EN/हिं)
                 </button>
-                <Link href="/advisor" onClick={() => setIsOpen(false)}>
-                  <GradientButton variant="primary" gradient="blue" className="w-full !py-4 text-lg">
-                    Get Started Free
-                  </GradientButton>
-                </Link>
+                
+                {user ? (
+                  <>
+                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-gray-700 font-bold border border-gray-200">
+                      Go to Dashboard
+                    </Link>
+                    <button onClick={() => { logout(); setIsOpen(false); }} className="w-full flex items-center justify-center py-4 rounded-xl text-red-600 font-bold bg-red-50">
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-gray-700 font-bold border border-gray-200">
+                      Log in
+                    </Link>
+                    <Link href="/signup" onClick={() => setIsOpen(false)}>
+                      <GradientButton variant="primary" gradient="blue" className="w-full !py-4 text-lg">
+                        Sign up Free
+                      </GradientButton>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
