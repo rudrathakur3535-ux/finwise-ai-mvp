@@ -13,6 +13,7 @@ import { AnimatedNumber } from "../components/ui/premium/AnimatedNumber";
 import { SectionHeader } from "../components/ui/premium/SectionHeader";
 import { GradientCard } from "../components/ui/premium/GradientCard";
 import { GlowBadge } from "../components/ui/premium/GlowBadge";
+import { ComparisonTable } from "../components/ComparisonTable";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -226,7 +227,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* SECTION 4: FEATURES GRID */}
+        {/* SECTION 4: COMPARISON TABLE */}
+        <ComparisonTable />
+
+        {/* SECTION 5: FEATURES GRID */}
         <section>
           <SectionHeader 
             badge="Features" 

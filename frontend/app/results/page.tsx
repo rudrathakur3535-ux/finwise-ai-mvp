@@ -13,6 +13,7 @@ import { PageWrapper } from "../../components/ui/premium/PageWrapper";
 import { GradientButton } from "../../components/ui/premium/GradientButton";
 import { GlowBadge } from "../../components/ui/premium/GlowBadge";
 import { TaxSavingSection } from "../../components/dashboard/TaxSavingSection";
+import { TrustScoreCard } from "../../components/TrustScoreCard";
 import { AdvisorResponse, RecommendedFund } from "../../lib/types";
 
 // Typewriter Effect Component
@@ -186,6 +187,9 @@ export default function ResultsPage() {
             <TypewriterText text={result.ai_advice || `Aapka risk score ${riskScore}/10 hai. Aapke liye best funds select kiye gaye hain with total monthly SIP of ₹${monthlySip.toLocaleString()}. Consistent SIP se long term mein achhe returns milenge. Invest karte raho!`} />
           </div>
         </motion.div>
+
+        {/* TRUST SCORE WIDGET */}
+        <TrustScoreCard riskScore={riskScore} />
 
         {/* CHARTS GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
