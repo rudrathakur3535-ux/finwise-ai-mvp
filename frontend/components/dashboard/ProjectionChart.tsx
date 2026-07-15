@@ -61,36 +61,36 @@ export function ProjectionChart({ funds, horizonYears }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E2E8F0] h-full"
+      className="glass-card p-6 h-full"
     >
       <div className="flex justify-between items-end mb-6">
         <div>
-          <h3 className="text-xl font-bold text-[#0F172A]">Wealth Projection</h3>
-          <p className="text-sm text-[#64748B]">Expected growth over {horizonYears} years</p>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">Wealth Projection</h3>
+          <p className="text-sm text-[var(--text-secondary)]">Expected growth over {horizonYears} years</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-[#64748B]">Expected Corpus</p>
-          <p className="text-2xl font-bold text-[#0F172A]">{formatCurrency(totalBase)}</p>
+          <p className="text-sm text-[var(--text-secondary)]">Expected Corpus</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">{formatCurrency(totalBase)}</p>
         </div>
       </div>
 
       <div className="h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
             <YAxis 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: '#64748B', fontSize: 12 }}
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={formatCurrency}
             />
             <Tooltip 
               formatter={(value: any) => formatCurrency(Number(value))}
-              contentStyle={{ backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', color: '#0F172A' }}
+              contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(8px)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', color: 'var(--text-primary)' }}
             />
-            <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', color: '#0F172A' }} />
-            <Line type="monotone" dataKey="Optimistic" stroke="#10B981" strokeWidth={2} dot={false} strokeDasharray="5 5" />
+            <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', color: 'var(--text-secondary)' }} />
+            <Line type="monotone" dataKey="Optimistic" stroke="var(--theme-accent)" strokeWidth={2} dot={false} strokeDasharray="5 5" />
             <Line type="monotone" dataKey="Expected" stroke="#3B82F6" strokeWidth={3} dot={true} activeDot={{ r: 6 }} />
             <Line type="monotone" dataKey="Pessimistic" stroke="#F59E0B" strokeWidth={2} dot={false} strokeDasharray="5 5" />
             <Line type="monotone" dataKey="Invested" stroke="#94A3B8" strokeWidth={2} dot={false} />

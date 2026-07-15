@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
 import { Navbar } from "@/components/layout/Navbar";
+import { ChatbotWidget } from "@/components/layout/ChatbotWidget";
 
 export const metadata: Metadata = {
   title: "FinWise AI - Premium AI Financial Advisor",
@@ -17,13 +18,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden selection:bg-blue-100 selection:text-blue-900">
+      <body className="min-h-full flex flex-col bg-[#0A0A0F] text-[#F1F5F9] relative overflow-x-hidden selection:bg-purple-900/40 selection:text-purple-200">
         <Providers>
           <Navbar />
           
           <main className="flex-grow z-10 w-full relative">
             {children}
           </main>
+          <ChatbotWidget />
         </Providers>
 
         <Script

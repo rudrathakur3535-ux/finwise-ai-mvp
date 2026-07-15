@@ -181,3 +181,43 @@ def generate_tax_advice(monthly_income: float, tax_saved: float, recommended_sip
             
     return f"Bhai, tumhari income ke hisaab se ELSS mein ₹{int(recommended_sip)} har mahine daalne se tum ₹{int(tax_saved)} tak ka tax bacha sakte ho. Isme 3 saal ka lock-in hota hai, par returns FD se kahin zyada milte hain!"
 
+
+def generate_chat_response(messages: list, user_context: dict = None) -> str:
+    """
+    Handle conversational chat queries for the FinWise Assistant widget.
+    """
+    # Create system context
+    context_str = ""
+    if user_context:
+        context_str = f"User Name: {user_context.get('name', 'User')}\nTier: {user_context.get('subscription_tier', 'free')}\n"
+    
+    system_prompt = f"""You are FinWise Assistant, a friendly AI financial advisor for the FinWise AI platform.
+{context_str}
+Rules:
+1. Always answer in Hinglish (a mix of Hindi and English).
+2. Be polite, professional, and concise. Use a few emojis.
+3. Your scope is limited to personal finance, mutual funds, SIPs, taxes, and using the FinWise platform.
+4. If a user asks something unrelated (e.g. coding, general trivia), politely decline and steer them back to finance.
+5. You do not have access to real-time market data, speak generally about principles if asked about live stocks.
+"""
+
+    # Format history for Gemini
+    formatted_contents = [{"role": "user", "parts": [{"text": system_prompt}]}]
+    
+    for msg in messages:
+        role = "user" if msg.get("role") == "user" else "model"
+        formatted_contents.append({"role": role, "parts": [{"text": msg.get("content", "")}]})
+
+    models_to_try = ["gemini-2.0-flash-lite", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+    for model_name in models_to_try:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=formatted_contents
+            )
+            return response.text.strip()
+        except Exception as e:
+            logger.warning(f"[GEMINI CHAT] {model_name} failed: {e}")
+            continue
+            
+    return "Maaf karna, abhi main thoda busy hoon. Please thodi der baad try karein."

@@ -21,23 +21,23 @@ export function ComparisonTable() {
         subtitle="See why thousands are switching to AI-powered financial planning." 
       />
       
-      <div className="max-w-4xl mx-auto mt-12 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
-        <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-100 p-6 text-center">
-          <div className="text-left font-bold text-gray-500 uppercase tracking-wider text-sm">Feature</div>
-          <div className="font-bold text-gray-500 uppercase tracking-wider text-sm">Traditional</div>
-          <div className="font-extrabold text-blue-600 uppercase tracking-wider text-sm">FinWise AI</div>
+      <div className="max-w-4xl mx-auto mt-12 glass-card rounded-3xl border border-white/10 shadow-xl overflow-hidden">
+        <div className="grid grid-cols-3 border-b border-white/10 p-6 text-center" style={{ background: 'rgba(255,255,255,0.04)' }}>
+          <div className="text-left font-bold uppercase tracking-wider text-sm" style={{ color: 'var(--text-secondary)' }}>Feature</div>
+          <div className="font-bold uppercase tracking-wider text-sm" style={{ color: 'var(--text-secondary)' }}>Traditional</div>
+          <div className="font-extrabold uppercase tracking-wider text-sm" style={{ color: 'var(--theme-accent)' }}>FinWise AI</div>
         </div>
         
         {comparisonData.map((row, index) => (
-          <div key={index} className="grid grid-cols-3 p-6 border-b border-gray-50 items-center text-center hover:bg-blue-50/30 transition-colors">
-            <div className="text-left font-bold text-gray-900">{row.feature}</div>
-            <div className="text-gray-500 font-medium flex flex-col items-center justify-center gap-1">
+          <div key={index} className="grid grid-cols-3 p-6 border-b border-white/10 items-center text-center hover:bg-white/5 transition-colors">
+            <div className="text-left font-bold text-white">{row.feature}</div>
+            <div className="font-medium flex flex-col items-center justify-center gap-1" style={{ color: 'var(--text-secondary)' }}>
               {(row.traditional === "No" || row.traditional.includes("Commission-driven") || row.traditional.includes("10,000")) ? (
                 <XCircle className="w-5 h-5 text-red-400 mb-1" />
               ) : null}
               {row.traditional}
             </div>
-            <div className="text-blue-900 font-bold flex flex-col items-center justify-center gap-1 bg-blue-50/50 p-2 rounded-lg">
+            <div className="font-bold flex flex-col items-center justify-center gap-1 bg-blue-500/10 p-2 rounded-lg text-white">
               <CheckCircle2 className="w-5 h-5 text-emerald-500 mb-1" />
               {row.finwise}
             </div>

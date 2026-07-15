@@ -39,7 +39,9 @@ class Database:
             
         except (ConnectionFailure, ServerSelectionTimeoutError) as e:
             logger.error(f"Failed to connect to MongoDB: {e}")
-            raise Exception("Could not connect to MongoDB Atlas.") from e
+            logger.warning("Server will start WITHOUT database. DB-dependent features will be unavailable.")
+            cls.client = None
+            cls.db = None
 
     @classmethod
     async def close_db(cls):

@@ -48,4 +48,32 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db = Depends(get
         
     # Convert MongoDB _id to string for JSON serialization
     user["_id"] = str(user["_id"])
+    
+    # Feature flag for subscription bypass
+    import os
+    if os.getenv("SUBSCRIPTION_BYPASS") == "true":
+        user["subscription_tier"] = "premium"
+        
     return user
+
+
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Request
+
+async def get_current_user_optional(request: Request, db=Depends(get_db)):
+    """Optional auth — returns user if token present, else None."""
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return None
+    token = auth_header[7:]
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if not user_id:
+            return None
+        user = await db.users.find_one({"user_id": user_id})
+        if user:
+            user["_id"] = str(user["_id"])
+        return user
+    except Exception:
+        return None

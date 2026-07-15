@@ -1,18 +1,33 @@
+# FinWise AI Backend — Production Dependencies (ONNX Runtime)
+# Removed: scikit-learn, xgboost, pandas (~250MB savings)
+# Using: onnxruntime for lightweight ML inference (~15MB)
+
+# Core
 fastapi==0.104.1
 uvicorn==0.24.0
-python-dotenv==1.0.0
-google-generativeai==0.3.2
 pydantic==2.5.0
-scikit-learn>=1.4.0
-xgboost==2.0.2
-joblib==1.3.2
+python-dotenv==1.0.0
+python-multipart
+
+# ML Inference (ONNX only)
+onnxruntime==1.21.1
 numpy>=1.26.0
-pandas>=2.1.3
-apscheduler==3.10.4
-httpx
+joblib==1.3.2
+
+# Gemini AI
 google-genai
+
+# Database
 motor
 pymongo
+certifi
+
+# Auth
 PyJWT
 passlib[bcrypt]
-python-multipart
+
+# HTTP client
+httpx
+
+# Scheduler
+apscheduler==3.10.4

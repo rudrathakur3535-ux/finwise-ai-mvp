@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell, Cpu, User as UserIcon, LogOut, Settings, CreditCard } from "lucide-react";
+import { Menu, X, Sparkles, Home, Bot, PieChart, Landmark, Bell, Cpu, User as UserIcon, LogOut, Settings, CreditCard, FlaskConical } from "lucide-react";
 import { GradientButton } from "../ui/premium/GradientButton";
 import { useAuth } from "@/lib/auth";
 
@@ -26,6 +26,7 @@ export function Navbar() {
   const navItems = [
     { name: "Home", path: "/", icon: Home },
     { name: "AI Advisor", path: "/advisor", icon: Bot },
+    { name: "Simulator", path: "/simulator", icon: FlaskConical },
     { name: "Portfolio", path: "/portfolio", icon: PieChart },
     { name: "Tax", path: "/tax-saving", icon: Landmark },
     { name: "ML Engine", path: "/ml-status", icon: Cpu },
@@ -46,20 +47,20 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 h-[64px] transition-all duration-300 ${
-          isScrolled ? "bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm" : "bg-white/50 backdrop-blur-sm border-b border-transparent"
+          isScrolled ? "glass-nav" : "bg-transparent border-b border-transparent"
         }`}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
           
           {/* Logo (Left) */}
           <Link href="/" className="flex items-center group relative z-50">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center mr-2 shadow-sm group-hover:shadow-md transition-shadow">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br grad-theme flex items-center justify-center mr-2 shadow-[var(--theme-accent-glow)] transition-shadow">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-gray-900 tracking-tight">
+            <span className="text-xl font-bold text-white tracking-tight">
               FinWise
             </span>
-            <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 ml-0.5">
+            <span className="text-xl font-extrabold bg-clip-text text-transparent grad-text-theme ml-0.5">
               AI
             </span>
           </Link>
@@ -79,19 +80,19 @@ export function Navbar() {
                     href={item.path}
                     className={`relative inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
                       isActive 
-                        ? "text-white shadow-[0_0_12px_rgba(37,99,235,0.2)]" 
-                        : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                        ? "text-white shadow-[var(--theme-accent-glow)]" 
+                        : "text-gray-400 hover:text-white hover:bg-white/5"
                     }`}
                   >
                     {isActive && (
                       <motion.div 
                         layoutId="nav-pill"
-                        className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full -z-10"
+                        className="absolute inset-0 bg-[var(--theme-accent)] rounded-full -z-10"
                         transition={{ type: "spring", stiffness: 350, damping: 30 }}
                       />
                     )}
                     <span className="relative z-10 flex items-center">
-                      <item.icon className={`w-4 h-4 mr-1.5 ${isActive ? "text-white" : "text-gray-400"}`} />
+                      <item.icon className={`w-4 h-4 mr-1.5 ${isActive ? "text-white" : "text-gray-500"}`} />
                       {item.name}
                     </span>
                   </Link>
@@ -104,7 +105,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <button 
               onClick={handleTranslate}
-              className="text-sm font-bold text-gray-600 hover:text-gray-900 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="text-sm font-bold text-gray-400 hover:text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors"
             >
               EN/हिं
             </button>
@@ -113,31 +114,31 @@ export function Navbar() {
               <div className="relative">
                 <button 
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center space-x-2 p-1 pr-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-full transition-all"
+                  className="flex items-center space-x-2 p-1 pr-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full grad-theme flex items-center justify-center text-white font-bold text-sm shadow-[var(--theme-accent-glow)]">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-bold text-gray-700">{user.name.split(' ')[0]}</span>
+                  <span className="text-sm font-bold text-gray-300">{user.name.split(' ')[0]}</span>
                 </button>
                 
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                    <div className="p-3 border-b border-gray-50">
-                      <p className="text-sm font-bold text-gray-900">{user.name}</p>
-                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                      <div className="mt-2 inline-block px-2 py-1 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md">
+                  <div className="absolute right-0 mt-2 w-56 bg-[#12121A] rounded-2xl shadow-xl border border-white/10 overflow-hidden z-50">
+                    <div className="p-3 border-b border-white/10">
+                      <p className="text-sm font-bold text-white">{user.name}</p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                      <div className="mt-2 inline-block px-2 py-1 bg-[var(--theme-accent-muted)] text-[var(--theme-accent-light)] text-[10px] font-black uppercase tracking-wider rounded-md border border-[var(--theme-accent)]">
                         {user.subscription_tier} Tier
                       </div>
                     </div>
                     <div className="p-2 space-y-1">
-                      <Link href="/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                        <UserIcon className="w-4 h-4 mr-2 text-gray-400" /> Dashboard
+                      <Link href="/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white rounded-lg transition-colors">
+                        <UserIcon className="w-4 h-4 mr-2 text-gray-500" /> Dashboard
                       </Link>
-                      <Link href="/pricing" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                        <CreditCard className="w-4 h-4 mr-2 text-gray-400" /> Subscription
+                      <Link href="/pricing" onClick={() => setDropdownOpen(false)} className="flex items-center px-3 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white rounded-lg transition-colors">
+                        <CreditCard className="w-4 h-4 mr-2 text-gray-500" /> Subscription
                       </Link>
-                      <button onClick={() => { logout(); setDropdownOpen(false); }} className="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg text-left">
+                      <button onClick={() => { logout(); setDropdownOpen(false); }} className="w-full flex items-center px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg text-left transition-colors">
                         <LogOut className="w-4 h-4 mr-2 text-red-400" /> Sign out
                       </button>
                     </div>
@@ -146,11 +147,11 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-bold text-gray-600 hover:text-gray-900 px-3 py-2">
+                <Link href="/login" className="text-sm font-bold text-gray-400 hover:text-white px-3 py-2 transition-colors">
                   Log in
                 </Link>
                 <Link href="/signup">
-                  <GradientButton variant="primary" gradient="blue" className="!py-2 !px-5 !text-sm">
+                  <GradientButton variant="primary" gradient="theme" className="!py-2 !px-5 !text-sm">
                     Sign up Free
                   </GradientButton>
                 </Link>
@@ -162,7 +163,7 @@ export function Navbar() {
           <div className="md:hidden flex items-center relative z-50">
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+              className="p-2 text-gray-400 hover:bg-white/10 hover:text-white rounded-full transition-colors focus:outline-none"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -178,7 +179,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed inset-x-0 top-[64px] z-40 bg-white border-b border-gray-100 shadow-xl md:hidden overflow-hidden origin-top"
+            className="fixed inset-x-0 top-[64px] z-40 bg-[#0A0A0F] border-b border-white/10 shadow-xl md:hidden overflow-hidden origin-top"
           >
             <div className="px-4 py-6 space-y-2 max-h-[calc(100vh-64px)] overflow-y-auto">
               {navItems.map((item, i) => {
@@ -195,41 +196,41 @@ export function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className={`flex items-center w-full px-4 py-4 rounded-xl text-lg font-bold transition-colors ${
                         isActive 
-                          ? "bg-blue-50 text-blue-600" 
-                          : "text-gray-700 hover:bg-gray-50"
+                          ? "bg-[var(--theme-accent-muted)] text-[var(--theme-accent-light)] border border-[var(--theme-accent)]" 
+                          : "text-gray-300 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <item.icon className={`w-6 h-6 mr-4 ${isActive ? "text-blue-500" : "text-gray-400"}`} />
+                      <item.icon className={`w-6 h-6 mr-4 ${isActive ? "text-[var(--theme-accent)]" : "text-gray-500"}`} />
                       {item.name}
                     </Link>
                   </motion.div>
                 );
               })}
               
-              <div className="pt-6 mt-6 border-t border-gray-100 space-y-4">
+              <div className="pt-6 mt-6 border-t border-white/10 space-y-4">
                 <button 
                   onClick={() => { handleTranslate(); setIsOpen(false); }}
-                  className="w-full flex items-center justify-center py-4 rounded-xl text-gray-700 font-bold bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="w-full flex items-center justify-center py-4 rounded-xl text-gray-300 font-bold bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
                 >
                   Switch Language (EN/हिं)
                 </button>
                 
                 {user ? (
                   <>
-                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-gray-700 font-bold border border-gray-200">
+                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-white font-bold border border-white/20 hover:bg-white/5 transition-colors">
                       Go to Dashboard
                     </Link>
-                    <button onClick={() => { logout(); setIsOpen(false); }} className="w-full flex items-center justify-center py-4 rounded-xl text-red-600 font-bold bg-red-50">
+                    <button onClick={() => { logout(); setIsOpen(false); }} className="w-full flex items-center justify-center py-4 rounded-xl text-red-400 font-bold bg-red-500/10 hover:bg-red-500/20 transition-colors">
                       Sign out
                     </button>
                   </>
                 ) : (
                   <>
-                    <Link href="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-gray-700 font-bold border border-gray-200">
+                    <Link href="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center py-4 rounded-xl text-white font-bold border border-white/20 hover:bg-white/5 transition-colors">
                       Log in
                     </Link>
                     <Link href="/signup" onClick={() => setIsOpen(false)}>
-                      <GradientButton variant="primary" gradient="blue" className="w-full !py-4 text-lg">
+                      <GradientButton variant="primary" gradient="theme" className="w-full !py-4 text-lg">
                         Sign up Free
                       </GradientButton>
                     </Link>
@@ -242,7 +243,7 @@ export function Navbar() {
       </AnimatePresence>
 
       {/* Mobile Bottom Nav (App-like feel) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 pb-safe shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0A0A0F]/95 backdrop-blur-md border-t border-white/10 pb-safe shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
         <div className="flex justify-around items-center h-16">
           {navItems.slice(0, 5).map((item) => {
             const isActive = pathname === item.path || (item.path !== "/" && pathname.startsWith(item.path));
@@ -253,10 +254,10 @@ export function Navbar() {
                 className="flex flex-col items-center justify-center w-full h-full space-y-1 relative"
               >
                 {isActive && (
-                  <motion.div layoutId="mobile-nav-indicator" className="absolute top-0 w-8 h-1 bg-blue-600 rounded-b-full" />
+                  <motion.div layoutId="mobile-nav-indicator" className="absolute top-0 w-8 h-1 bg-[var(--theme-accent)] rounded-b-full shadow-[var(--theme-accent-glow)]" />
                 )}
-                <item.icon className={`w-5 h-5 ${isActive ? "text-blue-600" : "text-gray-400"}`} />
-                <span className={`text-[9px] font-bold ${isActive ? "text-blue-600" : "text-gray-500"}`}>
+                <item.icon className={`w-5 h-5 ${isActive ? "text-[var(--theme-accent-light)]" : "text-gray-500"}`} />
+                <span className={`text-[9px] font-bold ${isActive ? "text-[var(--theme-accent-light)]" : "text-gray-500"}`}>
                   {item.name}
                 </span>
               </Link>

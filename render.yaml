@@ -1,0 +1,25 @@
+# FinWise AI — Render Infrastructure-as-Code
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: finwise-backend
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: SUBSCRIPTION_BYPASS
+        value: "true"
+      - key: PYTHON_VERSION
+        value: "3.11"

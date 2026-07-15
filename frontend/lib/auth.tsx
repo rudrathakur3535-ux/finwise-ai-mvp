@@ -28,6 +28,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  const applySubscriptionBypass = (u: User | null) => {
+    if (!u) return u;
+    if (process.env.NEXT_PUBLIC_SUBSCRIPTION_BYPASS === "true") {
+      return { ...u, subscription_tier: "premium" };
+    }
+    return u;
+  };
+
   useEffect(() => {
     // Check for token on mount
     const storedToken = localStorage.getItem("finwise_token");
@@ -35,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (storedToken && storedUser) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(applySubscriptionBypass(JSON.parse(storedUser)));
       // Optionally refresh user here
     }
     setIsLoading(false);
@@ -43,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (newToken: string, newUser: User) => {
     setToken(newToken);
-    setUser(newUser);
+    setUser(applySubscriptionBypass(newUser));
     localStorage.setItem("finwise_token", newToken);
     localStorage.setItem("finwise_user", JSON.stringify(newUser));
   };
@@ -67,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (res.ok) {
         const userData = await res.json();
-        setUser(userData);
+        setUser(applySubscriptionBypass(userData));
         localStorage.setItem("finwise_user", JSON.stringify(userData));
       } else if (res.status === 401) {
         logout();

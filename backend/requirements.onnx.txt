@@ -1,0 +1,32 @@
+# FinWise AI Backend — Optimized for ONNX Runtime
+# Removed: scikit-learn, xgboost, pandas (heavy ML libs)
+# Added: onnxruntime (lightweight inference only)
+
+# Core
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+python-multipart
+
+# ML Inference (ONNX only — replaces sklearn+xgboost ~250MB)
+onnxruntime==1.21.1
+numpy>=1.26.0
+joblib==1.3.2
+
+# Gemini AI
+google-genai
+
+# Database
+motor
+pymongo
+
+# Auth
+PyJWT
+passlib[bcrypt]
+
+# HTTP client
+httpx
+
+# Scheduler
+apscheduler==3.10.4

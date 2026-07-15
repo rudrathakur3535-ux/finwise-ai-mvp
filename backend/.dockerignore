@@ -1,0 +1,47 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+
+# Virtual env
+venv/
+.venv/
+
+# Environment files
+.env
+.env.*
+
+# Training scripts & data (not needed at runtime)
+scripts/
+ml/train_*.py
+ml/demo_for_judges.py
+ml/model_report.py
+ml/data/
+test_*.py
+append_*.py
+
+# Original pkl models (ONNX replaces them)
+ml/models/*.pkl
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+.DS_Store
+
+# Docs
+README.md
+*.md
+LICENSE
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore

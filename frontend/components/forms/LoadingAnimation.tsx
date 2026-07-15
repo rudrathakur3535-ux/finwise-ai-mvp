@@ -31,14 +31,14 @@ export function LoadingAnimation() {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-8 relative"
+        className="w-24 h-24 bg-[var(--theme-accent)]/10 rounded-full flex items-center justify-center mb-8 relative"
       >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 rounded-full border-4 border-blue-200 border-t-blue-600"
+          className="absolute inset-0 rounded-full border-4 border-[var(--theme-accent)]/20 border-t-[var(--theme-accent)]"
         ></motion.div>
-        <CurrentIcon className="w-10 h-10 text-blue-600" />
+        <CurrentIcon className="w-10 h-10 text-[var(--theme-accent)]" />
       </motion.div>
 
       <div className="h-8 relative w-full flex justify-center">
@@ -47,7 +47,7 @@ export function LoadingAnimation() {
             key={index}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: index === step ? 1 : 0, y: index === step ? 0 : -10 }}
-            className="absolute font-medium text-lg text-blue-900"
+            className="absolute font-medium text-lg text-[var(--text-primary)]"
           >
             {s.text}
           </motion.p>

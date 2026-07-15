@@ -18,16 +18,16 @@ export function Paywall({ children, featureName }: PaywallProps) {
           {children}
         </div>
         
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] z-10 p-6 text-center">
-          <div className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center mb-4">
-            <Lock className="w-8 h-8 text-gray-400" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0B0F19]/60 backdrop-blur-[2px] z-10 p-6 text-center">
+          <div className="w-16 h-16 bg-white/10 rounded-full shadow-lg flex items-center justify-center mb-4">
+            <Lock className="w-8 h-8 text-[var(--text-muted)]" />
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-2">🔒 Pro Feature</h3>
-          <p className="text-gray-700 font-medium mb-6 max-w-sm">
+          <h3 className="text-2xl font-black text-[var(--text-primary)] mb-2">🔒 Pro Feature</h3>
+          <p className="text-[var(--text-secondary)] font-medium mb-6 max-w-sm">
             Upgrade to Pro to unlock {featureName} and take full control of your finances.
           </p>
           <Link href="/pricing">
-            <GradientButton variant="primary" gradient="blue" className="!px-8 !py-3 shadow-xl shadow-blue-500/20">
+            <GradientButton variant="primary" gradient="blue" className="!px-8 !py-3 shadow-xl shadow-[var(--theme-accent)]/20">
               Upgrade to Pro →
             </GradientButton>
           </Link>

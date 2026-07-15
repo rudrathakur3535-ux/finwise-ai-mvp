@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 
 interface GradientButtonProps {
   variant?: "primary" | "outline" | "ghost";
-  gradient?: "blue" | "purple" | "green" | "amber" | "indigo";
+  gradient?: "theme" | "blue" | "purple" | "green" | "amber" | "indigo" | "teal" | "maroon";
   children: ReactNode;
   loading?: boolean;
   onClick?: () => void;
@@ -15,7 +15,7 @@ interface GradientButtonProps {
 
 export function GradientButton({ 
   variant = "primary", 
-  gradient = "blue", 
+  gradient = "theme", 
   children, 
   loading = false, 
   onClick, 
@@ -24,25 +24,10 @@ export function GradientButton({
   disabled = false
 }: GradientButtonProps) {
   
-  const baseStyle = "relative overflow-hidden font-bold rounded-[12px] transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyle = "relative overflow-hidden font-bold rounded-xl transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed z-10";
   
-  const gradientMap = {
-    blue: "from-blue-600 to-cyan-500",
-    purple: "from-purple-600 to-pink-500",
-    green: "from-emerald-500 to-cyan-500",
-    amber: "from-amber-500 to-red-500",
-    indigo: "from-indigo-600 to-purple-600",
-  };
-
-  const textGradientMap = {
-    blue: "text-blue-600",
-    purple: "text-purple-600",
-    green: "text-emerald-600",
-    amber: "text-amber-600",
-    indigo: "text-indigo-600",
-  };
-
-  const selectedGradient = gradientMap[gradient];
+  const gradientClass = gradient === "theme" ? "grad-theme" : `grad-${gradient}`;
+  const textGradientClass = gradient === "theme" ? "grad-text-theme" : `grad-text-${gradient}`;
 
   if (variant === "outline") {
     return (
@@ -52,16 +37,16 @@ export function GradientButton({
         whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
         onClick={onClick}
         disabled={disabled || loading}
-        className={`${baseStyle} border-2 border-transparent bg-white shadow-sm hover:shadow-md px-6 py-3 ${className}`}
+        className={`${baseStyle} glass-card border-[1px] hover:border-[var(--theme-accent)] px-6 py-3 ${className}`}
         style={{
-          backgroundClip: "padding-box, border-box",
-          backgroundImage: `linear-gradient(white, white), linear-gradient(135deg, var(--${gradient}), ${gradient === 'blue' ? 'var(--profile)' : 'var(--reminder)'})` // Approximate gradient borders
+          boxShadow: !disabled && !loading ? 'var(--theme-accent-glow)' : 'none',
+          transition: 'all 0.3s ease'
         }}
       >
-        <span className={`bg-clip-text text-transparent bg-gradient-to-r ${selectedGradient}`}>
+        <span className={`${textGradientClass}`}>
           {loading ? (
-            <span className="flex items-center text-gray-700">
-              <Loader2 className="w-5 h-5 mr-2 animate-spin text-gray-500" /> Please wait...
+            <span className="flex items-center text-gray-300">
+              <Loader2 className="w-5 h-5 mr-2 animate-spin text-gray-400" /> Please wait...
             </span>
           ) : (
             children
@@ -75,18 +60,18 @@ export function GradientButton({
     return (
       <motion.button
         type={type}
-        whileHover={!disabled && !loading ? { backgroundColor: "rgba(0,0,0,0.02)" } : {}}
+        whileHover={!disabled && !loading ? { backgroundColor: "rgba(255,255,255,0.05)" } : {}}
         whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
         onClick={onClick}
         disabled={disabled || loading}
-        className={`${baseStyle} px-6 py-3 text-gray-700 hover:text-gray-900 ${className}`}
+        className={`${baseStyle} px-6 py-3 text-gray-300 hover:text-white ${className}`}
       >
         {loading ? (
           <span className="flex items-center">
             <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Please wait...
           </span>
         ) : (
-          <span className={`bg-clip-text text-transparent bg-gradient-to-r ${selectedGradient} hover:brightness-110`}>
+          <span className={`${textGradientClass} hover:brightness-125 transition-all`}>
             {children}
           </span>
         )}
@@ -98,11 +83,14 @@ export function GradientButton({
   return (
     <motion.button
       type={type}
-      whileHover={!disabled && !loading ? { scale: 1.02, filter: "brightness(1.05)" } : {}}
+      whileHover={!disabled && !loading ? { scale: 1.02, filter: "brightness(1.15)" } : {}}
       whileTap={!disabled && !loading ? { scale: 0.98 } : {}}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`${baseStyle} bg-gradient-to-r ${selectedGradient} text-white shadow-md hover:shadow-lg px-6 py-3 ${className}`}
+      className={`${baseStyle} ${gradientClass} text-white px-6 py-3 border border-white/10 ${className}`}
+      style={{
+        boxShadow: !disabled && !loading ? 'var(--theme-accent-glow)' : 'none',
+      }}
     >
       {loading ? (
         <span className="flex items-center">

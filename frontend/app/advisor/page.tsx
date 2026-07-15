@@ -7,6 +7,7 @@ import {
   CheckCircle2, User, Calendar, MapPin, ArrowRight, IndianRupee, Wallet, 
   PiggyBank, Home, GraduationCap, Plane, TrendingUp, Sparkles, AlertCircle
 } from "lucide-react";
+import ThemeProvider from "../../components/ui/ThemeProvider";
 import { GradientButton } from "../../components/ui/premium/GradientButton";
 import { getInvestmentAdvice } from "../../lib/api";
 
@@ -135,45 +136,45 @@ export default function AdvisorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row pt-[64px]">
+    <ThemeProvider theme="green" className="min-h-screen flex flex-col md:flex-row pt-[64px]">
       
       {/* LEFT PANEL - Sticky Progress */}
-      <div className="w-full md:w-[35%] bg-purple-50/50 border-r border-purple-100 p-8 md:p-12 md:sticky md:top-[64px] md:h-[calc(100vh-64px)] flex flex-col justify-between relative z-10">
+      <div className="w-full md:w-[35%] bg-[var(--theme-bg-secondary)] border-r border-white/5 p-8 md:p-12 md:sticky md:top-[64px] md:h-[calc(100vh-64px)] flex flex-col justify-between relative z-10">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-10 flex items-center">
-            <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-500 flex items-center justify-center mr-3 shadow-md">
+          <h2 className="text-2xl font-bold text-white mb-10 flex items-center">
+            <span className="w-8 h-8 rounded-lg grad-theme flex items-center justify-center mr-3 shadow-[var(--theme-accent-glow)]">
               <Sparkles className="w-4 h-4 text-white" />
             </span>
             Advisor
           </h2>
 
           <div className="space-y-6 relative">
-            <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-purple-100 -z-10"></div>
+            <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-white/5 -z-10"></div>
             {steps.map((step, index) => {
               const isCompleted = currentStep > step.id;
               const isActive = currentStep === step.id;
               return (
                 <div key={step.id} className="flex items-center space-x-4">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-colors ${
-                    isCompleted ? "bg-emerald-500 border-emerald-500 text-white" :
-                    isActive ? "bg-purple-100 border-purple-600 text-purple-700 font-bold shadow-[0_0_12px_rgba(124,58,237,0.3)]" :
-                    "bg-white border-gray-200 text-gray-400"
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                    isCompleted ? "bg-[var(--theme-accent)] border-[var(--theme-accent)] text-white shadow-[var(--theme-accent-glow)]" :
+                    isActive ? "bg-[var(--theme-accent-muted)] border-[var(--theme-accent)] text-[var(--theme-accent-light)] font-bold shadow-[var(--theme-accent-glow)]" :
+                    "bg-[#12121A] border-gray-700 text-gray-500"
                   }`}>
-                    {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : (isActive ? <div className="w-2.5 h-2.5 rounded-full bg-purple-600 animate-pulse" /> : step.id)}
+                    {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : (isActive ? <div className="w-2.5 h-2.5 rounded-full bg-[var(--theme-accent)] animate-pulse" /> : step.id)}
                   </div>
                   <span className={`font-semibold text-lg transition-colors ${
-                    isActive ? "text-purple-700" :
-                    isCompleted ? "text-gray-900" :
-                    "text-gray-400"
+                    isActive ? "text-[var(--theme-accent-light)]" :
+                    isCompleted ? "text-white" :
+                    "text-gray-500"
                   }`}>{step.title}</span>
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-12 bg-white rounded-2xl p-6 border border-purple-100 shadow-sm">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Your Profile So Far</h4>
-            <div className="space-y-2 text-sm text-gray-600 font-medium">
+          <div className="mt-12 glass-card p-6 border border-[var(--theme-accent-muted)] shadow-sm bg-[var(--theme-accent-muted)]">
+            <h4 className="text-xs font-bold text-[var(--theme-accent-light)] uppercase tracking-wider mb-4 opacity-80">Your Profile So Far</h4>
+            <div className="space-y-2 text-sm text-white font-medium">
               <p>👤 {formData.name || "—"}{formData.age ? `, ${formData.age} yrs` : ""}</p>
               <p>💰 {formData.monthly_income ? `₹${formData.monthly_income.toLocaleString()} income` : "—"}</p>
               <p>🎯 {formData.goal || "—"}</p>
@@ -181,13 +182,13 @@ export default function AdvisorPage() {
           </div>
         </div>
 
-        <div className="hidden md:block mt-8 text-center text-sm font-bold text-purple-600/60">
+        <div className="hidden md:block mt-8 text-center text-sm font-bold text-[var(--theme-accent-light)] opacity-60">
           2 minutes to your financial freedom! 🚀
         </div>
       </div>
 
       {/* RIGHT PANEL - Forms */}
-      <div className="w-full md:w-[65%] p-6 md:p-16 lg:p-24 bg-white relative">
+      <div className="w-full md:w-[65%] p-6 md:p-16 lg:p-24 bg-[var(--theme-bg)] relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -199,7 +200,7 @@ export default function AdvisorPage() {
             className="max-w-xl mx-auto w-full"
           >
             {error && (
-              <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 flex items-center font-medium">
+              <div className="mb-6 bg-red-900/30 text-red-400 p-4 rounded-xl border border-red-500/30 flex items-center font-medium">
                 <AlertCircle className="w-5 h-5 mr-2" /> {error}
               </div>
             )}
@@ -208,49 +209,49 @@ export default function AdvisorPage() {
             {currentStep === 1 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Let's get started! 👋</h1>
-                  <p className="text-gray-500 text-lg">Tell us a bit about yourself</p>
+                  <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Let's get started! 👋</h1>
+                  <p className="text-[var(--text-secondary)] text-lg">Tell us a bit about yourself</p>
                 </div>
                 
                 <div className="space-y-5">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
+                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">Full Name</label>
                     <div className="relative group">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="text" 
                         value={formData.name} 
                         onChange={(e) => updateData({ name: e.target.value })}
                         placeholder="Enter your full name"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-medium"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Age</label>
+                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">Age</label>
                     <div className="relative group">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="number" 
                         value={formData.age || ""} 
                         onChange={(e) => updateData({ age: parseInt(e.target.value) || 0 })}
                         placeholder="Your age (18-80)"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-medium"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">City <span className="text-gray-400 font-normal">(optional)</span></label>
+                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">City <span className="text-gray-500 font-normal">(optional)</span></label>
                     <div className="relative group">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="text" 
                         value={formData.city} 
                         onChange={(e) => updateData({ city: e.target.value })}
                         placeholder="Your city"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-medium"
                       />
                     </div>
                   </div>
@@ -258,7 +259,7 @@ export default function AdvisorPage() {
 
                 <div className="pt-4">
                   <GradientButton 
-                    gradient="purple" 
+                    gradient="theme" 
                     onClick={nextStep} 
                     disabled={!formData.name.trim() || formData.age < 18 || formData.age > 80}
                     className="w-full text-lg !py-4"
@@ -273,50 +274,50 @@ export default function AdvisorPage() {
             {currentStep === 2 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Your finances 💰</h1>
-                  <p className="text-gray-500 text-lg">This helps us calculate your investable amount</p>
+                  <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Your finances 💰</h1>
+                  <p className="text-[var(--text-secondary)] text-lg">This helps us calculate your investable amount</p>
                 </div>
                 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Monthly Income</label>
+                    <label className="block text-sm font-bold text-white mb-2">Monthly Income</label>
                     <div className="relative group">
-                      <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="number" 
                         value={formData.monthly_income || ""} 
                         onChange={(e) => updateData({ monthly_income: parseInt(e.target.value) || 0 })}
                         placeholder="e.g. 60000"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-bold text-gray-900 text-lg placeholder:text-gray-400 placeholder:font-medium"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-bold text-lg"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Monthly Savings</label>
+                    <label className="block text-sm font-bold text-white mb-2">Monthly Savings</label>
                     <div className="relative group">
-                      <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="number" 
                         value={formData.monthly_savings || ""} 
                         onChange={(e) => updateData({ monthly_savings: parseInt(e.target.value) || 0 })}
                         placeholder="e.g. 15000"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-bold text-gray-900 text-lg placeholder:text-gray-400 placeholder:font-medium"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-bold text-lg"
                       />
                     </div>
                     {formData.monthly_income > 0 && formData.monthly_savings > 0 && (
                       <div className="mt-3">
-                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
                           <motion.div 
                             initial={{ width: 0 }}
                             animate={{ width: `${Math.min(100, (formData.monthly_savings / formData.monthly_income) * 100)}%` }}
                             className={`h-full ${
-                              (formData.monthly_savings / formData.monthly_income) > 0.2 ? 'bg-emerald-500' :
-                              (formData.monthly_savings / formData.monthly_income) >= 0.1 ? 'bg-amber-500' : 'bg-red-500'
+                              (formData.monthly_savings / formData.monthly_income) > 0.2 ? 'bg-emerald-500 shadow-[0_0_10px_#10B981]' :
+                              (formData.monthly_savings / formData.monthly_income) >= 0.1 ? 'bg-amber-500 shadow-[0_0_10px_#F59E0B]' : 'bg-red-500 shadow-[0_0_10px_#EF4444]'
                             }`}
                           />
                         </div>
-                        <p className="text-xs font-bold mt-2 text-gray-500">
+                        <p className="text-xs font-bold mt-2 text-gray-400">
                           You save {Math.round((formData.monthly_savings / formData.monthly_income) * 100)}% of income
                           {(formData.monthly_savings / formData.monthly_income) > 0.2 ? ' 👍' : ''}
                         </p>
@@ -325,33 +326,33 @@ export default function AdvisorPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Existing Investments <span className="text-gray-400 font-normal">(optional)</span></label>
+                    <label className="block text-sm font-bold text-white mb-2">Existing Investments <span className="text-gray-500 font-normal">(optional)</span></label>
                     <div className="relative group">
-                      <PiggyBank className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+                      <PiggyBank className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[var(--theme-accent-light)] transition-colors" />
                       <input 
                         type="number" 
                         value={formData.existing_amount || ""} 
                         onChange={(e) => updateData({ existing_amount: parseInt(e.target.value) || 0 })}
                         placeholder="What you've already invested"
-                        className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400"
+                        className="glass-input w-full pl-12 pr-4 py-4 font-medium"
                       />
                     </div>
                   </div>
                   
                   {formData.monthly_savings > 0 && (
-                    <div className="p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r-xl">
-                      <p className="text-sm font-bold text-purple-900">
+                    <div className="p-4 bg-[var(--theme-accent-muted)] border-l-4 border-[var(--theme-accent)] rounded-r-xl">
+                      <p className="text-sm font-bold text-[var(--theme-accent-light)]">
                         💡 You can invest ₹{Math.round(formData.monthly_savings * 0.6).toLocaleString()}/month 
-                        <span className="font-medium text-purple-700 ml-1">(60% of your savings)</span>
+                        <span className="font-medium text-gray-300 ml-1">(60% of your savings)</span>
                       </p>
                     </div>
                   )}
                 </div>
 
                 <div className="pt-4 flex space-x-4">
-                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-500 hover:bg-gray-100 rounded-xl transition-colors">Back</button>
+                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors">Back</button>
                   <GradientButton 
-                    gradient="purple" 
+                    gradient="theme" 
                     onClick={nextStep} 
                     disabled={!formData.monthly_income || !formData.monthly_savings || formData.monthly_savings > formData.monthly_income}
                     className="flex-1 text-lg !py-4"
@@ -366,7 +367,7 @@ export default function AdvisorPage() {
             {currentStep === 3 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Your financial goal 🎯</h1>
+                  <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Your financial goal 🎯</h1>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
@@ -383,15 +384,15 @@ export default function AdvisorPage() {
                       onClick={() => updateData({ goal: g.title })}
                       className={`cursor-pointer p-5 rounded-2xl border-2 transition-all duration-300 ${
                         formData.goal === g.title 
-                          ? "border-purple-500 bg-purple-50/50 shadow-md shadow-purple-500/10" 
-                          : "border-gray-100 bg-white hover:border-purple-200"
+                          ? "border-[var(--theme-accent)] bg-[var(--theme-accent-muted)] shadow-[var(--theme-accent-glow)]" 
+                          : "border-white/10 bg-white/5 hover:border-[var(--theme-accent-light)] hover:bg-white/10"
                       }`}
                     >
                       <div className="text-4xl mb-3">{g.icon}</div>
-                      <h4 className="font-bold text-gray-900">{g.title}</h4>
-                      <p className="text-xs text-gray-500 mt-1 font-medium">{g.desc}</p>
+                      <h4 className="font-bold text-white">{g.title}</h4>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1 font-medium">{g.desc}</p>
                       {formData.goal === g.title && (
-                        <div className="absolute top-4 right-4 text-purple-600">
+                        <div className="absolute top-4 right-4 text-[var(--theme-accent)]">
                           <CheckCircle2 className="w-5 h-5" />
                         </div>
                       )}
@@ -401,8 +402,8 @@ export default function AdvisorPage() {
 
                 <div className="pt-6">
                   <div className="flex justify-between items-center mb-6">
-                    <label className="block text-sm font-bold text-gray-700">Investment Horizon</label>
-                    <span className="text-2xl font-black text-purple-600 bg-purple-50 px-4 py-1 rounded-lg">
+                    <label className="block text-sm font-bold text-white">Investment Horizon</label>
+                    <span className="text-2xl font-black text-[var(--theme-accent-light)] bg-[var(--theme-accent-muted)] px-4 py-1 rounded-lg border border-[var(--theme-accent)]">
                       {formData.horizon_years} <span className="text-sm font-bold">Years</span>
                     </span>
                   </div>
@@ -412,9 +413,12 @@ export default function AdvisorPage() {
                     max={30}
                     value={formData.horizon_years}
                     onChange={(e) => updateData({ horizon_years: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-purple-600 hover:accent-purple-500 transition-all"
+                    className="w-full h-2 bg-white/20 rounded-full appearance-none cursor-pointer accent-[var(--theme-accent)] hover:accent-[var(--theme-accent-light)] transition-all"
+                    style={{
+                      accentColor: 'var(--theme-accent)'
+                    }}
                   />
-                  <div className="flex justify-between text-xs text-gray-400 mt-3 font-semibold px-1">
+                  <div className="flex justify-between text-xs text-gray-500 mt-3 font-semibold px-1">
                     <span>Short (1-3y)</span>
                     <span>Medium (5-7y)</span>
                     <span>Long (10y+)</span>
@@ -423,9 +427,9 @@ export default function AdvisorPage() {
                 </div>
 
                 <div className="pt-4 flex space-x-4">
-                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-500 hover:bg-gray-100 rounded-xl transition-colors">Back</button>
+                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors">Back</button>
                   <GradientButton 
-                    gradient="purple" 
+                    gradient="theme" 
                     onClick={nextStep} 
                     disabled={!formData.goal}
                     className="flex-1 text-lg !py-4"
@@ -440,8 +444,8 @@ export default function AdvisorPage() {
             {currentStep === 4 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Your risk personality 🎲</h1>
-                  <p className="text-gray-500 text-lg">3 quick questions</p>
+                  <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Your risk personality 🎲</h1>
+                  <p className="text-[var(--text-secondary)] text-lg">3 quick questions</p>
                 </div>
                 
                 <div className="space-y-10">
@@ -451,7 +455,7 @@ export default function AdvisorPage() {
                     { q: "If SIP is missed this month?", opts: [{ t: "Very stressed — money is tight", s: 1, l: "A" }, { t: "Slightly concerned", s: 2, l: "B" }, { t: "No problem — I have backup", s: 3, l: "C" }] },
                   ].map((q, qIndex) => (
                     <div key={qIndex}>
-                      <h3 className="font-bold text-gray-900 text-xl mb-4">{qIndex + 1}. {q.q}</h3>
+                      <h3 className="font-bold text-white text-xl mb-4">{qIndex + 1}. {q.q}</h3>
                       <div className="space-y-3">
                         {q.opts.map((opt, oIndex) => {
                           const isSelected = quizAnswers[qIndex] === opt.s;
@@ -478,11 +482,11 @@ export default function AdvisorPage() {
                               }}
                               className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 flex items-center ${
                                 isSelected 
-                                  ? "border-purple-500 bg-purple-50 text-purple-900 font-bold shadow-md shadow-purple-500/10" 
-                                  : "border-gray-100 hover:border-purple-200 text-gray-700 bg-white"
+                                  ? "border-[var(--theme-accent)] bg-[var(--theme-accent-muted)] text-white font-bold shadow-[var(--theme-accent-glow)]" 
+                                  : "border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 bg-white/5"
                               }`}
                             >
-                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-4 font-bold text-sm ${isSelected ? "bg-purple-600 text-white" : "bg-gray-100 text-gray-500"}`}>
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-4 font-bold text-sm ${isSelected ? "bg-[var(--theme-accent)] text-white" : "bg-white/10 text-gray-400"}`}>
                                 {opt.l}
                               </div>
                               {opt.t}
@@ -495,9 +499,9 @@ export default function AdvisorPage() {
                 </div>
 
                 <div className="pt-4 flex space-x-4">
-                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-500 hover:bg-gray-100 rounded-xl transition-colors">Back</button>
+                  <button onClick={prevStep} className="px-6 py-4 font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors">Back</button>
                   <GradientButton 
-                    gradient="purple" 
+                    gradient="theme" 
                     onClick={nextStep} 
                     disabled={quizAnswers.includes(-1)}
                     className="flex-1 text-lg !py-4"
@@ -512,10 +516,10 @@ export default function AdvisorPage() {
             {currentStep === 5 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">Ready to go! 🚀</h1>
+                  <h1 className="text-4xl font-extrabold text-white mb-3 tracking-tight">Ready to go! 🚀</h1>
                 </div>
                 
-                <div className="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50 p-8">
+                <div className="glass-card rounded-3xl border border-[var(--theme-accent-muted)] shadow-[var(--theme-accent-glow)] p-8">
                   <div className="grid grid-cols-2 gap-y-8 gap-x-6">
                     {[
                       { label: "Full Name", val: formData.name },
@@ -526,28 +530,28 @@ export default function AdvisorPage() {
                       { label: "Time Horizon", val: `${formData.horizon_years} years` },
                     ].map((item, i) => (
                       <div key={i}>
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{item.label}</p>
-                        <p className="font-bold text-lg text-gray-900">{item.val}</p>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{item.label}</p>
+                        <p className="font-bold text-lg text-white">{item.val}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-gray-100">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Calculated Risk Appetite</p>
-                    <div className="inline-flex items-center space-x-2 bg-purple-50 px-4 py-2 rounded-xl border border-purple-100">
+                  <div className="mt-8 pt-6 border-t border-white/10">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Calculated Risk Appetite</p>
+                    <div className="inline-flex items-center space-x-2 bg-[var(--theme-accent-muted)] px-4 py-2 rounded-xl border border-[var(--theme-accent)]">
                       <span className="text-xl">⚡</span>
-                      <span className="font-black text-lg text-purple-700 capitalize">{formData.risk_appetite} Investor</span>
+                      <span className="font-black text-lg text-white capitalize">{formData.risk_appetite} Investor</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-4 flex space-x-4">
-                  <button onClick={prevStep} disabled={isLoading} className="px-6 py-4 font-bold text-gray-500 hover:bg-gray-100 rounded-xl transition-colors disabled:opacity-50">Edit</button>
+                  <button onClick={prevStep} disabled={isLoading} className="px-6 py-4 font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors disabled:opacity-50">Edit</button>
                   <GradientButton 
-                    gradient="purple" 
+                    gradient="theme" 
                     onClick={handleSubmit} 
                     loading={isLoading}
-                    className="flex-1 text-lg !py-4 shadow-[0_8px_30px_rgba(124,58,237,0.3)]"
+                    className="flex-1 text-lg !py-4 shadow-[var(--theme-accent-glow)]"
                   >
                     ✨ Generate My Investment Plan
                   </GradientButton>
@@ -566,9 +570,9 @@ export default function AdvisorPage() {
                         animate={{ opacity: 1, x: 0 }} 
                         transition={{ delay: i * 1.2 }} 
                         key={i} 
-                        className="flex items-center text-sm font-bold text-gray-600"
+                        className="flex items-center text-sm font-bold text-gray-300"
                       >
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 mr-2" /> {t}
+                        <CheckCircle2 className="w-4 h-4 text-[var(--theme-accent)] mr-2" /> {t}
                       </motion.div>
                     ))}
                   </motion.div>
@@ -578,6 +582,6 @@ export default function AdvisorPage() {
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }

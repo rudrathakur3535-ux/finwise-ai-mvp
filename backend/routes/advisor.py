@@ -251,6 +251,27 @@ async def explain_fund_route(req: ExplainRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 # ----------------------------------------
+# CHAT ENDPOINT — /api/advisor/chat
+# ----------------------------------------
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: list[ChatMessage]
+    user_context: dict = None
+
+@router.post("/advisor/chat")
+async def chat_route(req: ChatRequest):
+    try:
+        from services.ai_explainer import generate_chat_response
+        messages = [{"role": m.role, "content": m.content} for m in req.messages]
+        reply = generate_chat_response(messages, req.user_context)
+        return {"reply": reply}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ----------------------------------------
 # TAX SAVING ENDPOINT — /api/tax-saving
 # ----------------------------------------
 @router.get("/tax-saving")

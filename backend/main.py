@@ -15,6 +15,7 @@ from routers.portfolio import router as portfolio_router
 from routers.auth import router as auth_router
 from routers.subscription import router as subscription_router
 from routers.dashboard import router as dashboard_router
+from routers.simulator import router as simulator_router
 from services.reminder_service import check_and_send_reminders
 from apscheduler.schedulers.background import BackgroundScheduler
 from contextlib import asynccontextmanager
@@ -47,10 +48,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS — Frontend (Next.js) aur Vercel se requests allow karo
+# CORS — Frontend (Vercel) aur local dev se requests allow karo
+import os
+cors_origins = [
+    "https://finwise-ai-mvp-9ck2.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+# Allow custom origin from env (for staging/other deploys)
+extra_origin = os.getenv("CORS_ORIGIN")
+if extra_origin:
+    cors_origins.append(extra_origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Hackathon production ke liye sab allow kar do
+    allow_origins=cors_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -62,6 +75,7 @@ app.include_router(portfolio_router, prefix="/api/portfolio", tags=["Portfolio"]
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 app.include_router(subscription_router, prefix="/api/subscription", tags=["Subscription"])
 app.include_router(dashboard_router, prefix="/api/dashboard", tags=["Dashboard"])
+app.include_router(simulator_router)
 
 
 @app.get("/health")
