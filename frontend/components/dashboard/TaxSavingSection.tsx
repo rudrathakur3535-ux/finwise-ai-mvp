@@ -174,7 +174,7 @@ export function TaxSavingSection({ monthlyIncome, userProfile }: Props) {
 
         <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">Top Recommended ELSS Funds</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(data.recommended_funds ?? data.recommended_elss ?? []).map((fund, index) => (
+          {(data.recommended_funds ?? []).map((fund, index) => (
             <FundCard 
               key={fund.scheme_code || fund.name || index} 
               fund={fund} 

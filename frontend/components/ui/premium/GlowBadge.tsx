@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface GlowBadgeProps {
   text: string;
-  color?: "theme" | "blue" | "purple" | "green" | "amber" | "indigo" | "gray";
+  color?: "theme" | "blue" | "purple" | "green" | "amber" | "indigo" | "teal" | "maroon" | "gray";
   icon?: ReactNode;
   className?: string;
 }
@@ -15,6 +15,8 @@ export function GlowBadge({ text, color = "theme", icon, className = "" }: GlowB
     green: "bg-emerald-900/30 text-emerald-300 border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.2)]",
     amber: "bg-amber-900/30 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.2)]",
     indigo: "bg-indigo-900/30 text-indigo-300 border-indigo-500/50 shadow-[0_0_12px_rgba(79,70,229,0.2)]",
+    teal: "bg-teal-900/30 text-teal-300 border-teal-500/50 shadow-[0_0_12px_rgba(20,184,166,0.2)]",
+    maroon: "bg-rose-900/30 text-rose-300 border-rose-500/50 shadow-[0_0_12px_rgba(225,29,72,0.2)]",
     gray: "bg-gray-800/50 text-gray-300 border-gray-600/50 shadow-sm",
   };
 

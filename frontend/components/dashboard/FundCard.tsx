@@ -70,7 +70,7 @@ export function FundCard({ fund, index, userProfile }: Props) {
             <TrendingUp className="w-4 h-4 text-[var(--theme-accent)]" />
             <span className="text-sm font-bold text-[var(--theme-accent)]">5Y Return</span>
           </div>
-          <span className="font-bold text-[var(--theme-accent)]">{fund.returns?.["5y"] || fund.historical_return_3yr || 0}% p.a.</span>
+          <span className="font-bold text-[var(--theme-accent)]">{fund.returns?.["5y"] || fund.returns?.["3y"] || 0}% p.a.</span>
         </div>
 
         {fund.live_nav ? (
