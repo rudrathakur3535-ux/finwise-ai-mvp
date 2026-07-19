@@ -63,6 +63,7 @@ if extra_origin:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
+    allow_origin_regex=r".*", # Allows all domains to fix network errors
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

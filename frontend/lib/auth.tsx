@@ -30,10 +30,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const applySubscriptionBypass = (u: User | null) => {
     if (!u) return u;
-    if (process.env.NEXT_PUBLIC_SUBSCRIPTION_BYPASS === "true") {
-      return { ...u, subscription_tier: "premium" };
-    }
-    return u;
+    // Always give premium access to disable all paywalls permanently
+    return { ...u, subscription_tier: "premium" };
   };
 
   useEffect(() => {
