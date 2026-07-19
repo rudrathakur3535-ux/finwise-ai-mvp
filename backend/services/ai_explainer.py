@@ -220,4 +220,4 @@ Rules:
             logger.warning(f"[GEMINI CHAT] {model_name} failed: {e}")
             continue
             
-    return "Maaf karna, abhi main thoda busy hoon. Please thodi der baad try karein."
+    return "Maaf karna, abhi main thoda busy hoon (Ya phir Render par GEMINI_API_KEY set nahi hai!). Please check environment variables or try again later."

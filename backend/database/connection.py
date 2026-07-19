@@ -68,4 +68,7 @@ async def get_db():
     """Dependency injection helper for FastAPI."""
     if db_instance.db is None:
         await db_instance.connect_db()
+    if db_instance.db is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=503, detail="Database connection is currently unavailable. Please check your Render environment variables.")
     return db_instance.db
