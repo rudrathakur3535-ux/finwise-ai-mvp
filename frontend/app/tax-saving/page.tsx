@@ -78,7 +78,7 @@ export default function TaxSavingPage() {
                       required
                     />
                   </div>
-                  <PremiumButton type="submit" variant="primary" gradient="theme" className="w-full">
+                  <PremiumButton type="submit" variant="primary" className="w-full">
                     Calculate Tax Savings
                   </PremiumButton>
                 </form>
