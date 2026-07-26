@@ -4,8 +4,8 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: cd backend && npm install && npx prisma db push && npx prisma generate
-    startCommand: cd backend && npx tsx src/index.ts
+    buildCommand: cd adaptive-learning/backend && npm install && npx prisma db push && npx prisma generate
+    startCommand: cd adaptive-learning/backend && npx tsx src/index.ts
     envVars:
       - key: PORT
         value: 3001
