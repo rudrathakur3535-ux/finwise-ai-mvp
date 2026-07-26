@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: adaptive-learning-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install && npx prisma db push && npx prisma generate
+    startCommand: cd backend && npx tsx src/index.ts
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        value: "file:./dev.db"
+      - key: JWT_SECRET
+        value: "super-secret-key-adaptive-learning-2026"

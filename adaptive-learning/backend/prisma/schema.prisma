@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  password String
+  role     String   // "STUDENT" or "TEACHER"
+  attempts QuizAttempt[]
+  masteries TopicMastery[]
+}
+
+model TopicMastery {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  topicId Int
+  score   Float @default(0)
+  user    User @relation(fields: [userId], references: [id])
+  topic   Topic @relation(fields: [topicId], references: [id])
+
+  @@unique([userId, topicId])
+}
+
+model Subject {
+  id     Int     @id @default(autoincrement())
+  name   String
+  topics Topic[]
+}
+
+model Topic {
+  id        Int       @id @default(autoincrement())
+  name      String
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+  subjectId Int
+  questions Question[]
+  attempts  QuizAttempt[]
+  masteries TopicMastery[]
+}
+
+model Question {
+  id              Int       @id @default(autoincrement())
+  content         String
+  options         String    // JSON string of options
+  correctOption   Int       // Index of correct option
+  difficultyLevel Int       // 1, 2, 3
+  topic           Topic     @relation(fields: [topicId], references: [id])
+  topicId         Int
+  attempts        QuestionAttempt[]
+}
+
+model QuizAttempt {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  topic      Topic     @relation(fields: [topicId], references: [id])
+  topicId    Int
+  startTime  DateTime  @default(now())
+  endTime    DateTime?
+  score      Int?
+  questions  QuestionAttempt[]
+}
+
+model QuestionAttempt {
+  id                  Int         @id @default(autoincrement())
+  quizAttempt         QuizAttempt @relation(fields: [quizAttemptId], references: [id])
+  quizAttemptId       Int
+  question            Question    @relation(fields: [questionId], references: [id])
+  questionId          Int
+  isCorrect           Boolean
+  timeTakenMs         Int
+  selectedOptionIndex Int?
+}
