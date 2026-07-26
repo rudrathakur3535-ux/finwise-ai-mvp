@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, XCircle, Clock, Target } from 'lucide-react';
+import { API_BASE_URL } from '../lib/api';
 
 export default function QuizReview() {
   const { quizAttemptId } = useParams();
@@ -16,7 +17,7 @@ export default function QuizReview() {
       return;
     }
 
-    axios.get(`http://localhost:3001/api/quiz/review/${quizAttemptId}`, { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/quiz/review/${quizAttemptId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         setReviewData(res.data);
         setLoading(false);

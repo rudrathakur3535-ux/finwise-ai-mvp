@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Zap, Target, TrendingUp, TrendingDown, Star, CheckCircle2, XCircle } from 'lucide-react';
 import { soundFx } from '../lib/soundFx';
+import { API_BASE_URL } from '../lib/api';
 
 export default function QuizEngine() {
   const { topicId } = useParams();
@@ -47,7 +48,7 @@ export default function QuizEngine() {
       return;
     }
 
-    axios.post('http://localhost:3001/api/quiz/start', { topicId }, { headers: { Authorization: `Bearer ${token}` } })
+    axios.post(`${API_BASE_URL}/api/quiz/start`, { topicId }, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         setQuizAttemptId(res.data.quizAttemptId);
         setQuestion(res.data.question);
@@ -83,7 +84,7 @@ export default function QuizEngine() {
     setTimeout(async () => {
       setQuizState('LOADING');
       try {
-        const res = await axios.post('http://localhost:3001/api/quiz/next-question', {
+        const res = await axios.post(`${API_BASE_URL}/api/quiz/next-question`, {
           quizAttemptId,
           questionId: question.id,
           isCorrect,
@@ -94,7 +95,7 @@ export default function QuizEngine() {
         setMasteryScore(res.data.currentMasteryScore);
 
         if (res.data.finished) {
-          const submitRes = await axios.post('http://localhost:3001/api/quiz/submit', { quizAttemptId }, { headers: { Authorization: `Bearer ${token}` } });
+          const submitRes = await axios.post(`${API_BASE_URL}/api/quiz/submit`, { quizAttemptId }, { headers: { Authorization: `Bearer ${token}` } });
           setResults(submitRes.data);
           soundFx.playFanfareSound();
           setQuizState('FINISHED');

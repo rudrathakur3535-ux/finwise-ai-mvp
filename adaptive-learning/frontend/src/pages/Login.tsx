@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { BookOpen, KeyRound, User } from 'lucide-react';
+import { API_BASE_URL } from '../lib/api';
 
 export default function Login() {
   const [username, setUsername] = useState('student');
@@ -15,7 +16,7 @@ export default function Login() {
     setIsLoading(true);
     setError('');
     try {
-      const res = await axios.post('http://localhost:3001/api/auth/login', {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         username,
         password
       });

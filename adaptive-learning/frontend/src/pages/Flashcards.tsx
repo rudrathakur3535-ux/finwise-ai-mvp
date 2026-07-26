@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, RotateCw, CheckCircle2, XCircle, ChevronLeft, ChevronRight, Layers, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { soundFx } from '../lib/soundFx';
+import { API_BASE_URL } from '../lib/api';
 
 export default function Flashcards() {
   const { topicId } = useParams();
@@ -22,7 +23,7 @@ export default function Flashcards() {
     }
 
     // Start quiz attempt to fetch questions or load topic questions
-    axios.post('http://localhost:3001/api/quiz/start', { topicId }, { headers: { Authorization: `Bearer ${token}` } })
+    axios.post(`${API_BASE_URL}/api/quiz/start`, { topicId }, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.question) {
           // Generate a flashcard deck from topic data

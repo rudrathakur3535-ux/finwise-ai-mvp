@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trophy, Medal, Star, Flame } from 'lucide-react';
+import { API_BASE_URL } from '../lib/api';
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
@@ -15,12 +16,12 @@ export default function Leaderboard() {
       return;
     }
 
-    axios.get('http://localhost:3001/api/leaderboard', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/leaderboard`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setLeaderboard(res.data))
       .catch(console.error);
       
     // Fetch profile to know who current user is for highlighting
-    axios.get('http://localhost:3001/api/profile/stats', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/profile/stats`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setCurrentUser(res.data.user))
       .catch(console.error);
   }, [navigate]);

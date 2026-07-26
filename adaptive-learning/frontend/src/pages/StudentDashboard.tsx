@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, BookOpen, ChevronRight, Trophy, TrendingUp, Target, Flame, Activity, Layers, Sparkles } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { API_BASE_URL } from '../lib/api';
 
 import AchievementsWidget from '../components/AchievementsWidget';
 import WeaknessHeatmap from '../components/WeaknessHeatmap';
@@ -21,15 +22,15 @@ export default function StudentDashboard() {
       return;
     }
     
-    axios.get('http://localhost:3001/api/subjects', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/subjects`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setSubjects(res.data))
       .catch(console.error);
       
-    axios.get('http://localhost:3001/api/dashboard/student', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/dashboard/student`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setDashboardData(res.data))
       .catch(console.error);
 
-    axios.get('http://localhost:3001/api/profile/stats', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/profile/stats`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setProfileStats(res.data))
       .catch(console.error);
   }, [navigate]);

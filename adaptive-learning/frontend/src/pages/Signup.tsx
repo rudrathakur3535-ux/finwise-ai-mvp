@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus, User, KeyRound, GraduationCap, Users } from 'lucide-react';
+import { API_BASE_URL } from '../lib/api';
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -16,13 +17,13 @@ export default function Signup() {
     setIsLoading(true);
     setError('');
     try {
-      await axios.post('http://localhost:3001/api/auth/register', {
+      await axios.post(`${API_BASE_URL}/api/auth/register`, {
         username,
         password,
         role
       });
       // Registration successful, log them in immediately
-      const res = await axios.post('http://localhost:3001/api/auth/login', {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         username,
         password
       });

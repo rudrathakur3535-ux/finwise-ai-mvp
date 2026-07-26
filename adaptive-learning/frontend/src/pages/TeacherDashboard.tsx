@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Users, Activity, TrendingUp, TrendingDown, Plus, Sparkles, X, CheckCircle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { API_BASE_URL } from '../lib/api';
 
 export default function TeacherDashboard() {
   const [data, setData] = useState<any>(null);
@@ -25,7 +26,7 @@ export default function TeacherDashboard() {
       return;
     }
     
-    axios.get('http://localhost:3001/api/dashboard/teacher', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/dashboard/teacher`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => setData(res.data))
       .catch(console.error);
   }, [navigate]);
